@@ -11,9 +11,9 @@ namespace Charity.Mvc.Context
         public DbSet<Institution> Institutions { get; set; }
         public new DbSet<CharityUser> Users { get; set; }
         public new DbSet<IdentityRole> Roles { get; set; }
+        public DbSet<Donation> Donations { get; set; }
 
         public CharityDbContext(DbContextOptions options) : base(options) { }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
