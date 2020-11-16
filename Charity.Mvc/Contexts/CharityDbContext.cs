@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Charity.Mvc.Context
+namespace Charity.Mvc.Contexts
 {
     public class CharityDbContext : IdentityDbContext
     {
@@ -68,12 +68,12 @@ namespace Charity.Mvc.Context
                {
                    Id = 1,
                    Name = "Fundacja \"Bez domu\"",
-                   Desctiption = "Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania"
+                   Description = "Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania"
                }, new Institution
                {
                    Id = 2,
                    Name = "Fundacja \"Dla dzieci\"",
-                   Desctiption = "Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej"
+                   Description = "Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej"
                });
         }
     }

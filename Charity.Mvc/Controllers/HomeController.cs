@@ -6,14 +6,39 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Charity.Mvc.Models;
 using Charity.Mvc.Models.ViewModels;
+using Charity.Mvc.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Charity.Mvc.Controllers
 {
 	public class HomeController : Controller
 	{
-		public IActionResult Index()
+		private readonly IDonationService _donationService;
+		private readonly ILogger _logger;
+
+        public HomeController(IDonationService donationService, ILoggerFactory loggerFactory)
+        {
+            _donationService = donationService;
+            _logger = loggerFactory.CreateLogger("Home Controller");
+        }
+
+        public IActionResult Index()
 		{
-			return View();
+			IndexOrganisationsBagsViewModel model;
+			try
+			{
+				model = new IndexOrganisationsBagsViewModel()
+				{
+					Institutions = _donationService.GetInstitutionList(),
+					InstitutionCount = _donationService.GetInstitutionCount(),
+					BagCount = _donationService.GetTotalNumberOfBags()
+				};
+			}
+            catch (Exception)
+            {
+                throw;
+            }
+			return View(model);
 		}
 
 		public IActionResult Error()

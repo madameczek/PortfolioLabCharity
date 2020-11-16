@@ -10,6 +10,9 @@ namespace Charity.Mvc.Models.DbModels
     public class Donation
     {
         public int Id { get; set; }
+        /// <summary>
+        /// Number of bags donated
+        /// </summary>
         public int Quantity { get; set; }
         public string Street { get; set; }
         public string City { get; set; }

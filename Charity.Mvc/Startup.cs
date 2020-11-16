@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Charity.Mvc.Context;
+using Charity.Mvc.Contexts;
+using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,10 @@ namespace Charity.Mvc
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 			});
-			services.AddControllersWithViews();
+			services.AddScoped<IDonationService, DonationService>();
 
-			//services.AddMvc();
+			services.AddControllersWithViews();
+			//services.AddMvc(); // This adds AddControllersWithViews() + RazorPages
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
