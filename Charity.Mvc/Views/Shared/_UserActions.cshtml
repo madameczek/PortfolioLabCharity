@@ -1,0 +1,23 @@
+﻿@{
+    if (User.Identity.IsAuthenticated)
+    {
+        <ul class="nav--actions">
+            <li class="logged-user">
+                Witaj Agata
+                <ul class="dropdown">
+                    <li><a href="#">Profil</a></li>
+                    <li><a href="#">Ustawienia</a></li>
+                    <li><a href="#">Moje zbiórki</a></li>
+                    <li><a href="#">Wyloguj</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav--actions">
+            <li><a href="" class="btn btn--small btn--without-border">Zaloguj</a></li>
+            <li><a href="#" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+        </ul>
+    }
+}
