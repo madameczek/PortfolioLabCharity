@@ -15,12 +15,6 @@ namespace Charity.Mvc.Controllers
 	{
 		private readonly IDonationService _donationService;
 		private readonly ILogger _logger;
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="donationService"></param>
-		/// <param name="loggerFactory"></param>
         public HomeController(IDonationService donationService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;

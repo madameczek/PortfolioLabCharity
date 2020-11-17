@@ -1,12 +1,16 @@
 ﻿@model Charity.Mvc.Models.ViewModels.LoginViewModel
-
 @{
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<header class="header--main-page">
+    @Html.PartialAsync("_MenuBar").Result
 
-<hr />
+    @Html.PartialAsync("_SloganHome.cshtml").Result
+</header>
+
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Login">
