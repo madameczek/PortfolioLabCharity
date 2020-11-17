@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Charity.Mvc.Contexts;
+using Charity.Mvc.Models.DbModels;
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +32,11 @@ namespace Charity.Mvc
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 			});
+			services.AddIdentity<CharityUser, IdentityRole>().AddEntityFrameworkStores<CharityDbContext>();
+			services.AddScoped<SignInManager<CharityUser>>();
+			services.AddScoped<UserManager<CharityUser>>();
 			services.AddScoped<IDonationService, DonationService>();
+			services.AddScoped<IUserManagerService, UserManagerService>();
 
 			services.AddControllersWithViews();
 			//services.AddMvc(); // This adds AddControllersWithViews() + RazorPages
