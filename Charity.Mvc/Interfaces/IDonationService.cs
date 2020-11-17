@@ -14,5 +14,6 @@ namespace Charity.Mvc.Services
         List<Institution> GetInstitutionList(int skip = 0, int take = 4);
         int GetTotalNumberOfBags();
         int GetInstitutionCount();
+        List<Category> GetCategoryList();
     }
 }
