@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Charity.Mvc</name>
+    </assembly>
+    <members>
+        <!-- Badly formed XML comment ignored for member "M:Charity.Mvc.Services.IDonationService.GetInstitutionList(System.Int32,System.Int32)" -->
+        <member name="P:Charity.Mvc.Models.DbModels.DonationViewModel.Quantity">
+            <summary>
+            Number of bags donated
+            </summary>
+        </member>
+    </members>
+</doc>

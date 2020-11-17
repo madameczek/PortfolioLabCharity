@@ -15,7 +15,12 @@ namespace Charity.Mvc.Controllers
 	{
 		private readonly IDonationService _donationService;
 		private readonly ILogger _logger;
-
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="donationService"></param>
+		/// <param name="loggerFactory"></param>
         public HomeController(IDonationService donationService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;
@@ -24,10 +29,10 @@ namespace Charity.Mvc.Controllers
 
         public IActionResult Index()
 		{
-			IndexOrganisationsBagsViewModel model;
+			OrganisationsBagsViewModel model;
 			try
 			{
-				model = new IndexOrganisationsBagsViewModel()
+				model = new OrganisationsBagsViewModel()
 				{
 					Institutions = _donationService.GetInstitutionList(),
 					InstitutionCount = _donationService.GetInstitutionCount(),

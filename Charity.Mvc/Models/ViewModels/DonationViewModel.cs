@@ -1,28 +1,24 @@
-﻿using System;
+﻿using Charity.Mvc.Models.DbModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Charity.Mvc.Models.DbModels
+namespace Charity.Mvc.Models.ViewModels
 {
     public class DonationViewModel
     {
         public int Id { get; set; }
-        /// <summary>
-        /// Number of bags donated
-        /// </summary>
         public int Quantity { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string ZipCode { get; set; }
-        public DateTime PickUpOn { get; set; }
+        public DateTime PickUpDateOn { get; set; }
+        public DateTime PickUpTimeOn { get; set; }
         public string PickUpComment { get; set; }
-
-        // Relationships
         public List<Category> Categories { get; set; }
-        [Required]
-        public Institution  Institution { get; set; }
+        public List<Institution>  Institutions { get; set; }
     }
 }

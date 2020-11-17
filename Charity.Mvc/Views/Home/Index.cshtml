@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Strona główna";
 }
-
+@model Charity.Mvc.Models.ViewModels.OrganisationsBagsViewModel
 
 <section id="stats" class="stats">
     <div class="container container--85">
@@ -73,20 +73,27 @@
             <ul class="help--slides-items">
                 @for (int i = 0; i < Model.Institutions.Count; i += 2)
                 {
-                    <li>
-                        <div class="col">
-                            <div class="title">@Model.Institutions[i].Name</div>
-                            <div class="subtitle">@Model.Institutions[i].Description</div>
-                        </div>
+                <li>
+                    <div class="col">
+                        <div class="title">@Model.Institutions[i].Name</div>
+                        <div class="subtitle">@Model.Institutions[i].Description</div>
+                    </div>
 
-                        @if (i+1 < Model.Institutions.Count)
-                        {
-                            <div class="col">
-                                <div class="title">@Model.Institutions[i+1].Name</div>
-                                <div class="subtitle">@Model.Institutions[i+1].Description</div>
-                            </div>
-                        }
-                    </li>
+                    @if (i + 1 < Model.Institutions.Count)
+                    {
+                        <div class="col">
+                            <div class="title">@Model.Institutions[i + 1].Name</div>
+                            <div class="subtitle">@Model.Institutions[i + 1].Description</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <div class="title"></div>
+                            <div class="subtitle"></div>
+                        </div>
+                    }
+                </li>
                 }
             </ul>
         </div>

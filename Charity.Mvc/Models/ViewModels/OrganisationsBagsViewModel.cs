@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Charity.Mvc.Models.ViewModels
 {
-    public class IndexOrganisationsBagsViewModel
+    public class OrganisationsBagsViewModel
     {
         public List<Institution> Institutions { get; set; }
         public int BagCount { get; set; }

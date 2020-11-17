@@ -856,6 +856,11 @@ header.header--main-page {
   height: 100vh;
 }
 
+header.header--main-page1 {
+    
+    height: 100vh;
+}
+
 @media (min-width: 990px) and (max-width: 1230px) {
   /* line 2, scss/modules/_header.scss */
   header.header--main-page {

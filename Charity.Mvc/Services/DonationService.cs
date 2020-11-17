@@ -22,7 +22,14 @@ namespace Charity.Mvc.Services
         {
             try
             {
-                return _context.Institutions.Skip(0).Take(take).ToList();
+                if (take != 0)
+                {
+                    return _context.Institutions.Skip(skip).Take(take).ToList();
+                }
+                else
+                {
+                    return _context.Institutions.ToList();
+                }
             }
             catch (Exception e)
             {
@@ -53,6 +60,19 @@ namespace Charity.Mvc.Services
             catch(Exception e)
             {
                 _logger.LogError(e, "Error fetching institution count");
+                throw;
+            }
+        }
+
+        public List<Category> GetCategoryList()
+        {
+            try
+            {
+                return _context.Categories.ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error fetching category list");
                 throw;
             }
         }
