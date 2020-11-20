@@ -3,12 +3,12 @@
     {
         <ul class="nav--actions">
             <li class="logged-user">
-                Witaj @User.Identity.Name
+                Witaj @User.Identity.Name.Split("_").First()
                 <ul class="dropdown">
                     <li><a href="#">Profil</a></li>
                     <li><a href="#">Ustawienia</a></li>
                     <li><a href="#">Moje zbiórki</a></li>
-                    <li><a href="#">Wyloguj</a></li>
+                    <li><a asp-controller="Account" asp-action="Logout">Wyloguj</a></li>
                 </ul>
             </li>
         </ul>
@@ -17,7 +17,7 @@
     {
         <ul class="nav--actions">
             <li><a asp-controller="Account" asp-action="Login" class="btn btn--small btn--without-border">Zaloguj</a></li>
-            <li><a href="#" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+            <li><a asp-controller="Account" asp-action="Registration" class="btn btn--small btn--highlighted">Załóż konto</a></li>
         </ul>
     }
 }

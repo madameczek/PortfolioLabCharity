@@ -251,8 +251,8 @@ paket-files/
 .idea/
 *.sln.iml
 
-# Connection Strings
-*connectionstring.json
+# Configuration Secrets
+*appsecrets.json
 
 # Html templates
 [Rr]esources/

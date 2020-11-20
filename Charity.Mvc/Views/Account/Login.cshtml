@@ -12,11 +12,12 @@
     <form asp-action="Login" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <input type="Email" name="email" placeholder="Email" />
+            <input asp-for="Email" type="email" />
             <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="text-danger">@TempData["warning_email"]</div>
         </div>
         <div class="form-group">
-            <input type="password" name="password" placeholder="Hasło" />
+            <input asp-for="Password" type="password" />
             <span asp-validation-for="Password" class="text-danger"></span>
             <a asp-action="ResetPassword" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
         </div>
@@ -30,4 +31,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_BootstrapScriptsPartial");}
 }
