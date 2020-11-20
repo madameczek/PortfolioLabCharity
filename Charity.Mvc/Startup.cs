@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 
 namespace Charity.Mvc
 {
@@ -49,8 +50,7 @@ namespace Charity.Mvc
 			services.AddScoped<UserManager<CharityUser>>();
 			services.AddScoped<IDonationService, DonationService>();
 			services.AddScoped<IUserManagerService, UserManagerService>();
-			//var mailKitOptions = Configuration.GetSection("Email").Get<NETCore.MailKit.Infrastructure.Internal.MailKitOptions>();
-			//services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("MailKitOptions").Get<MailKitOptions>()));
+			services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("MailKitOptions").Get<MailKitOptions>()));
 
 			services.AddControllersWithViews();
 

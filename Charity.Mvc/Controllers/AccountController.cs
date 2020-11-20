@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NETCore.MailKit.Core;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -41,6 +42,7 @@ namespace Charity.Mvc.Controllers
                     var loginResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
                     if (loginResult.Succeeded)
                     {
+                        _ = _emailService.SendAsync("marek@adameczek.pl", "Login confirmation", "Logowanie do aplikacji Charity");
                         return RedirectToAction("Index", "Home");
                     }
 
@@ -146,19 +148,22 @@ namespace Charity.Mvc.Controllers
         private readonly UserManager<CharityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserManagerService _userManagerService;
+        private readonly IEmailService _emailService;
         private readonly ILogger _logger;
         public AccountController(
             ILoggerFactory loggerFactory,
             SignInManager<CharityUser> signInManager, 
             UserManager<CharityUser> userManager, 
             RoleManager<IdentityRole> roleManager, 
-            IUserManagerService userManagerService)
+            IUserManagerService userManagerService,
+            IEmailService emailService)
         {
             _logger = loggerFactory.CreateLogger("Account Controller");
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _userManagerService = userManagerService;
+            _emailService = emailService;
         }
         #endregion
     }
