@@ -2,6 +2,7 @@
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,10 @@ namespace Charity.Mvc.Controllers
             var model = new DonationViewModel()
             {
                 Institutions = _donationService.GetInstitutionList(take: 0),
-                Categories = _donationService.GetCategoryList()
+                
             };
+            var categories = JsonConvert.SerializeObject(_donationService.GetCategoryList());
+            model.Categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(categories);
 
             return View(nameof(Donate), model);
         }

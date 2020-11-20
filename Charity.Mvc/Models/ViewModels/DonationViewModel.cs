@@ -18,7 +18,8 @@ namespace Charity.Mvc.Models.ViewModels
         public DateTime PickUpDateOn { get; set; }
         public DateTime PickUpTimeOn { get; set; }
         public string PickUpComment { get; set; }
-        public List<Category> Categories { get; set; }
+        public List<CategoryViewModel> Categories { get; set; }
         public List<Institution>  Institutions { get; set; }
+        public Institution SelectedInstitution { get; set; }
     }
 }
