@@ -43,7 +43,7 @@
                         <div class="form-group form-group--checkbox">
                             <label>
                                 <input asp-for="@item.IsChecked" type="checkbox"
-                                        name="categories" />
+                                       name="categories" />
                                 <span class="checkbox"></span>
                                 <span class="description">@item.Name</span>
                             </label>
@@ -72,7 +72,6 @@
                     <button type="button" class="btn next-step">Dalej</button>
                 </div>
             </div>
-
 
             <!-- STEP 4 -->
             <div data-step="3">
@@ -262,4 +261,5 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_BootstrapScriptsPartial");}
 }

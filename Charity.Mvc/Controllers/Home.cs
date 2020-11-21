@@ -11,14 +11,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Charity.Mvc.Controllers
 {
-	public class HomeController : Controller
+	public class Home : Controller
 	{
 		private readonly IDonationService _donationService;
 		private readonly ILogger _logger;
-        public HomeController(IDonationService donationService, ILoggerFactory loggerFactory)
+        public Home(IDonationService donationService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;
-            _logger = loggerFactory.CreateLogger("Home Controller");
+            _logger = loggerFactory.CreateLogger("HomeController");
         }
 
         public IActionResult Index()

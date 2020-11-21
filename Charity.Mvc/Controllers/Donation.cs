@@ -10,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace Charity.Mvc.Controllers
 {
-    public class DonationController : Controller
+    [RequireHttps]
+    public class Donation : Controller
     {
         private readonly IDonationService _donationService;
         private readonly ILogger _logger;
-        public DonationController(IDonationService donationService, ILoggerFactory loggerFactory)
+        public Donation(IDonationService donationService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;
-            _logger = loggerFactory.CreateLogger("Donation Controller");
+            _logger = loggerFactory.CreateLogger("DonationController");
         }
 
         [HttpGet]
@@ -35,9 +36,9 @@ namespace Charity.Mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Donate(int model)
+        public IActionResult Donate(DonationViewModel model)
         {
-
+            
             return View();
         }
     }

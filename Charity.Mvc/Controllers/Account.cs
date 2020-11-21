@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using NETCore.MailKit.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,8 @@ using System.Threading.Tasks;
 
 namespace Charity.Mvc.Controllers
 {
-    public class AccountController : Controller
+    [RequireHttps]
+    public class Account : Controller
     {
         [HttpGet]
         public IActionResult Login()
@@ -25,7 +27,7 @@ namespace Charity.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginAsync(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -34,25 +36,25 @@ namespace Charity.Mvc.Controllers
                     var user = _userManagerService.GetUserByEmail(model.Email);
                     if (user == null)
                     {
-                        TempData["warning_email"] = "Nie odnaleziono adresu e-mail";
+                        ModelState.AddModelError("", "Nie odnaleziono użytkownika lub błędne hasło");
                         return View(model);
                     }
 
                     await _signInManager.SignOutAsync();
-                    var loginResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
+                    var loginResult = await _signInManager.PasswordSignInAsync(user.Name, model.Password, true, false);
                     if (loginResult.Succeeded)
                     {
-                        _ = _emailService.SendAsync("marek@adameczek.pl", "Login confirmation", "Logowanie do aplikacji Charity");
-                        return RedirectToAction("Index", "Home");
+                        _logger.LogInformation("User {User} logged in to application as {Role} ", user.Email, await _userManager.GetRolesAsync(user));
+                        return RedirectToAction(nameof(Index), nameof(Home));
                     }
-
-                    TempData["warning_password"] = "Pokombinuj jeszcze z hasłem";
+                    
+                    ModelState.AddModelError("", "Nie odnaleziono użytkownika lub błędne hasło");
                     return View(model);
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Error logging in user.");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(nameof(Index), nameof(Home));
                 }
             }
             return View(model);
@@ -66,7 +68,7 @@ namespace Charity.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegistrationAsync(RegistrationViewModel model)
+        public async Task<IActionResult> Registration(RegistrationViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -74,7 +76,7 @@ namespace Charity.Mvc.Controllers
                 {
                     if (!_userManagerService.IsEmailUnique(model.Email))
                     {
-                        TempData["warning_email"] = "Ten adres email jest już zarejestrowany";
+                        ModelState.AddModelError("", "Ten adres email jest już zarejestrowany");
                         return View(model);
                     }
 
@@ -90,19 +92,22 @@ namespace Charity.Mvc.Controllers
                     user.NormalizedEmail = user.Email.ToUpper();
 
                     var createUserResult = await _userManager.CreateAsync(user, model.Password);
-                    var addToRoleResult = await _userManager.AddToRoleAsync(user, "User");
-
-                    if(createUserResult.Succeeded && addToRoleResult.Succeeded)
+                    if(createUserResult.Succeeded)
                     {
+                        await _userManager.AddToRoleAsync(user, "User");
                         _logger.LogInformation("Created user with email {User}.", user.Email);
-                        //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        //var link = Url.Action(action: nameof(VerifyEmailAsync), controller: nameof(AccountController), new { user.Id, token });
-                        return RedirectToAction("Login", "Account");
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var confirmationLink = Url.Action(nameof(EmailConfirmed), "Account", new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
+                        _ = _emailService.SendAsync(
+                            "marek@adameczek.pl", 
+                            "Registration confirmation", 
+                            $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br /><a href=\"{confirmationLink}\">Potwierdź adres email</a>",
+                            true);
+                        return RedirectToAction(nameof(SuccessfulRegistration));
                     }
                     else
                     {
-                        _logger.LogWarning("Valid user model with email {User} not created.", user.Email);
-                        TempData["warning_regerror"] = "Wystąpił błąd";
+                        ModelState.AddModelError("", "Nie udało się dodać użytkownika");
                         return View(model);
                     }
                 }
@@ -114,18 +119,40 @@ namespace Charity.Mvc.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> VerifyEmailAsync(string userId, string token)
+        [HttpGet]
+        public IActionResult SuccessfulRegistration() 
+        { 
+            return View(); 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EmailConfirmed(string user, string token)
         {
-            return View();
+            var identityUser = _userManager.FindByIdAsync(user).Result;
+            if(identityUser != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(identityUser, token);
+                if (result.Succeeded || await _userManager.IsEmailConfirmedAsync(identityUser))
+                {
+                    return View(nameof(EmailConfirmed));
+                }
+            }
+            return RedirectToAction(nameof(Error));
         }
 
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index), nameof(Home));
         }
 
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [NonAction]
         static string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
@@ -150,7 +177,7 @@ namespace Charity.Mvc.Controllers
         private readonly IUserManagerService _userManagerService;
         private readonly IEmailService _emailService;
         private readonly ILogger _logger;
-        public AccountController(
+        public Account(
             ILoggerFactory loggerFactory,
             SignInManager<CharityUser> signInManager, 
             UserManager<CharityUser> userManager, 

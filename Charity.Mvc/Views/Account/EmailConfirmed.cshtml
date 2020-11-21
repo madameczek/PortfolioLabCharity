@@ -1,0 +1,17 @@
+﻿@using Charity.Mvc.Controllers
+@{
+    ViewData["Title"] = "ConfirmEmail";
+}
+
+<header>
+    @Html.PartialAsync("_MenuBar").Result
+</header>
+
+<section class="login-page">
+    <h2>
+        Adres email został potwierdzony!<br />
+        <a asp-controller=@nameof(Account) asp-action=@nameof(Account.Login)>
+            Możesz się teraz zalogować
+        </a>
+    </h2>
+</section>

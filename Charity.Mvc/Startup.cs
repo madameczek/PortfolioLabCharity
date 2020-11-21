@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Charity.Mvc.Contexts;
+using Charity.Mvc.CustomTokenProviders;
 using Charity.Mvc.Models;
 using Charity.Mvc.Models.DbModels;
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,8 +37,9 @@ namespace Charity.Mvc
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
 			});
+			
 			services.AddIdentity<CharityUser, IdentityRole>(config =>
-			{ 
+			{
 				config.Password.RequiredLength = 4;
 				config.Password.RequireDigit = false;
 				config.Password.RequireUppercase = false;
@@ -44,24 +47,27 @@ namespace Charity.Mvc
 				config.Password.RequireLowercase = false;
 				config.SignIn.RequireConfirmedEmail = false;
 				config.SignIn.RequireConfirmedPhoneNumber = false;
+				config.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
 			})
-				.AddEntityFrameworkStores<CharityDbContext>();
+				.AddEntityFrameworkStores<CharityDbContext>()
+				.AddDefaultTokenProviders()
+				.AddTokenProvider<EmailTokenProvider<CharityUser>>("emailconfirmation");
+			services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
+			services.Configure<EmailConfirmationTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromDays(3));
+
 			services.AddScoped<SignInManager<CharityUser>>();
 			services.AddScoped<UserManager<CharityUser>>();
 			services.AddScoped<IDonationService, DonationService>();
 			services.AddScoped<IUserManagerService, UserManagerService>();
 			services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("MailKitOptions").Get<MailKitOptions>()));
-
 			services.AddControllersWithViews();
+			services.Configure<MvcOptions>(options => options.Filters.Add(new RequireHttpsAttribute()));
 
-			// This disables client side validation if needed. 
-			// In Chrome, browser validates some fields (like email) anyway.
-			/*services.AddRazorPages()
-			.AddViewOptions(options =>
-			{
-				options.HtmlHelperOptions.ClientValidationEnabled = false;
-			});*/
-		}
+            // This disables client side validation if needed. 
+            // In Chrome, browser validates some fields (like email) anyway.
+            /*services.AddRazorPages()
+				.AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled = false);*/
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

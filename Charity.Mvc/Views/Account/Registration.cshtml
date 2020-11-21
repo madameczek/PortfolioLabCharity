@@ -10,7 +10,15 @@
 <section class="login-page">
     <h2>Załóż konto</h2>
     <form asp-action="Registration" method="post">
-        <div class="text-danger">@TempData["warning_regerror"]</div>
+        <div class="text-danger">
+        @{
+            var errors = ViewData.ModelState.Where(n => n.Value.Errors.Count() > 0).ToList();
+            if (errors != null)
+            {
+                errors.ForEach(e => e.Value.Errors.ToList().ForEach(i=>i.ErrorMessage.ToString()));
+            }
+        }
+        </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <input asp-for="Name" />
@@ -22,7 +30,6 @@
         </div>
         <div class="form-group">
             <input asp-for="Email" type="email" />
-            <div class="text-danger">@TempData["warning_email"]</div>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group">
