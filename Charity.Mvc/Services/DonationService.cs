@@ -94,15 +94,17 @@ namespace Charity.Mvc.Services
         {
             try
             {
+                // Create donation entity
                 donation.Institution = GetInstitution(institutionId);
                 _context.Donations.Add(donation);
                 var result = _context.SaveChanges();
-                
+                // Create entities for joining table between donations and categories
                 var categoryDonations = new List<CategoryDonationModel>();
                 categoryIds.ForEach(c => categoryDonations.Add(new CategoryDonationModel() { CategoryId = c, DonationId = donation.Id }));
                 _context.AddRange(categoryDonations);
                 _context.SaveChanges();
 
+                _logger.LogInformation("Created donation in the database.");
                 return Task.CompletedTask;
             }
             catch (Exception e)
@@ -110,8 +112,6 @@ namespace Charity.Mvc.Services
                 _logger.LogError(e, "Error creating a donation.");
                 return Task.FromException(e);
             }
-
         }
-   
     }
 }
