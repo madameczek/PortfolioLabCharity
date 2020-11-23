@@ -99,9 +99,11 @@ namespace Charity.Mvc.Controllers
                         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         var confirmationLink = Url.Action(nameof(EmailConfirmed), "Account", new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
                         _ = _emailService.SendAsync(
-                            "marek@adameczek.pl", 
+                            user.Email, 
                             "Registration confirmation", 
-                            $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br /><a href=\"{confirmationLink}\">Potwierdź adres email</a>",
+                            $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br />" +
+                            $"<a href=\"{confirmationLink}\">Potwierdź adres email</a><br />" +
+                            $"Zignoruj tę wiadomość, jeśli nie donowywałeś(aś) rejestracji.",
                             true);
                         return RedirectToAction(nameof(SuccessfulRegistration));
                     }
@@ -153,7 +155,7 @@ namespace Charity.Mvc.Controllers
         }
 
         [NonAction]
-        static string RemoveDiacritics(string text)
+        private string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();

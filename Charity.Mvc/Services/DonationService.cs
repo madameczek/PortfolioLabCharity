@@ -76,5 +76,10 @@ namespace Charity.Mvc.Services
                 throw;
             }
         }
+
+        public bool SaveDonation()
+        {
+            return true;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model Charity.Mvc.Models.ViewModels.OrganisationsBagsViewModel
+﻿@using Charity.Mvc.Controllers
+@model Charity.Mvc.Models.ViewModels.OrganisationsBagsViewModel
 @{
     ViewBag.Title = "Strona główna";
 }
@@ -52,7 +53,7 @@
         </div>
     </div>
 
-    <a href="#" class="btn btn--large">Załóż konto</a>
+    <a asp-controller=@nameof(Account) asp-action=@nameof(Account.Registration) class="btn btn--large">Załóż konto</a>
 </section>
 
 <section id="about-us" class="about-us">

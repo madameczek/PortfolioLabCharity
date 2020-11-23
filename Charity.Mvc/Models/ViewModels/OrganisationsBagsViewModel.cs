@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Charity.Mvc.Models.ViewModels
 {
+    // Used in Slide1 on Home/Index
     public class OrganisationsBagsViewModel
     {
         public List<Institution> Institutions { get; set; }

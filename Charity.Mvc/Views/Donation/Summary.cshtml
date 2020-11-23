@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Summary";
+}
+@using Charity.Mvc.Controllers
+@model Charity.Mvc.Models.ViewModels.DonationViewModel
+
+<header class="header--form-page">
+    @Html.PartialAsync("_MenuBar").Result
+    @Html.PartialAsync("_SloganDonation.cshtml").Result
+</header>
+
+<section class="form--steps">
+    <div class="form--steps-container">
+        <form asp-action=@nameof(Donation.Confirmation) method="post">
+            <div data-step="5" class="active">
+                <h3>Podsumowanie Twojej darowizny</h3>
+
+                <input asp-for=Quantity type="hidden" value=@Model.Quantity />
+                <input asp-for=Street type="hidden" value=@Model.Street />
+                <input asp-for=City type="hidden" value=@Model.City />
+                <input asp-for=ZipCode type="hidden" value=@Model.ZipCode />
+                <input asp-for=PhoneNumber type="hidden" value=@Model.PhoneNumber />
+                <input asp-for=PickUpDateOn type="hidden" value=@Model.PickUpDateOn />
+                <input asp-for=PickUpTimeOn type="hidden" value=@Model.PickUpTimeOn />
+                <input asp-for=PickUpComment type="hidden" value=@Model.PickUpComment />
+                <input asp-for=InstitutionId type="hidden" value=@Model.InstitutionId />
+                
+                <div class="summary">
+                    <div class="form-section">
+                        <h4>Oddajesz worków: @Model.Quantity</h4>
+                        <ul>
+                            <li>
+                                <span class="icon icon-bag"></span>
+                                <span class="summary--text">
+                                    <ul>
+                                        @for (var i = 0; i < Model.Categories.Count; i++)
+                                        {
+                                            if (Model.Categories[i].IsChecked)
+                                            {
+                                                <li>
+                                                    @Model.Categories[i].Name
+                                                </li>
+                                            }
+                                            <input asp-for=Categories[i].Name type="hidden" value=@Model.Categories[i].Name />
+                                            <input asp-for=Categories[i].Id type="hidden" value=@Model.Categories[i].Id />
+                                            <input asp-for=Categories[i].IsChecked type="hidden" value=@Model.Categories[i].IsChecked />
+                                        }
+                                    </ul>
+                                </span>
+                            </li>
+
+                            <li>
+                                <span class="icon icon-hand"></span>
+                                <span class="summary--text">
+                                    Dla:
+                                    @{
+                                        //var institutions = Model.Institutions.Where(i => i.Id == Model.InstitutionId).ToList();
+                                        for (var i = 0; i < Model.Institutions.Count; i++)
+                                        {
+                                            if (Model.Institutions[i].Id == @Model.InstitutionId) @Model.Institutions[i].Name;
+                                            <input asp-for="Institutions[i].Name" type="hidden" value="@Model.Institutions[i].Name" />
+                                            <input asp-for="Institutions[i].Description" type="hidden" value="@Model.Institutions[i].Description" />
+                                            <input asp-for="Institutions[i].Id" type="hidden" value="@Model.Institutions[i].Id" />
+                                        }
+                                    }
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="form-section form-section--columns">
+                        <div class="form-section--column">
+                            <h4>Adres odbioru:</h4>
+                            <ul>
+                                <li>@Model.Street</li>
+                                <li>@Model.City</li>
+                                <li>@Model.ZipCode</li>
+                                <li>@Model.PhoneNumber</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-section--column">
+                            <h4>Termin odbioru:</h4>
+                            <ul>
+                                <li>@Model.PickUpDateOn.ToString("yyyy.MM.dd")</li>
+                                <li>@Model.PickUpTimeOn.ToString("HH:mm")</li>
+                                <li>@Model.PickUpComment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <span>
+
+                </span>
+
+                <div class="form-group form-group--buttons">
+                    <button type="submit" class="btn" name="Command" value="Edit">Edycja</button>
+                    <button type="submit" class="btn" name="Command" value="Save">Potwierdzam</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
