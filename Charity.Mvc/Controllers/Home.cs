@@ -21,6 +21,7 @@ namespace Charity.Mvc.Controllers
             _logger = loggerFactory.CreateLogger("HomeController");
         }
 
+		[HttpGet]
         public IActionResult Index()
 		{
 			OrganisationsBagsViewModel model;

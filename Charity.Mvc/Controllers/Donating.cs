@@ -3,31 +3,20 @@ using Charity.Mvc.Models.ViewModels;
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NETCore.MailKit.Core;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Charity.Mvc.Controllers
 {
     [RequireHttps]
     public class Donating : Controller
     {
-        
         private List<string> errors;
-
-        private readonly IDonationService _donationService;
-        private readonly ILogger _logger;
-        private readonly IEmailService _emailService;
-        public Donating(IDonationService donationService, ILoggerFactory loggerFactory, IEmailService emailService)
-        {
-            _donationService = donationService;
-            _logger = loggerFactory.CreateLogger("DonationController");
-            _emailService = emailService;
-        }
 
         [HttpGet]
         public IActionResult Donate()
@@ -76,18 +65,43 @@ namespace Charity.Mvc.Controllers
             {
                 return View("Donate", model);
             }
+
+            // Prepare Donation object for save to database
             var donationJson = JsonConvert.SerializeObject(model);
             var donation = JsonConvert.DeserializeObject<DonationModel>(donationJson);
             donation.PickUpOn = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
-            // create list of categories beeing in relation to the donation
+            
+            // Create list of categories beeing in relation to the donation
             var categoryIds = new List<int>();
-            model.Categories.Where(x=>x.IsChecked==true).ToList().ForEach(c => categoryIds.Add(c.Id));
-            await _donationService.CreateDonationAsync(donation, model.InstitutionId, categoryIds);
+            model.Categories.Where(x => x.IsChecked == true).ToList().ForEach(c => categoryIds.Add(c.Id));
+            
+            // Find authenticated user Id. Add relation Donation-User
+            //string userId;
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _userManager.FindByIdAsync(userId).Result;
+                donation.User = user;
+            }
 
-            return View();
+            var createDonationTask = _donationService.CreateDonationAsync(donation, model.InstitutionId, categoryIds);
+            
+            // Send confirmation email to authenticated user
+            await createDonationTask;
+            if (createDonationTask.IsCompletedSuccessfully)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    _ = _emailService.SendDonationConfirmation(donation);
+                }
+                return View();
+            }
+            return RedirectToAction(nameof(Home.Index), nameof(Home));
         }
 
         [NonAction]
+        // This method validates model against requirements additional to these set by attributes.
+        // If validation fails, add message to ModelState dictionary
         private bool IsModelValid(DonationViewModel model, out List<string> errors)
         {
             errors = new List<string>();
@@ -113,9 +127,18 @@ namespace Charity.Mvc.Controllers
             return errors.Count == 0;
         }
 
-        private void SendEmailAsync()
+        #region Ctor & DI
+        private readonly IDonationService _donationService;
+        private readonly UserManager<CharityUser> _userManager;
+        private readonly ILogger _logger;
+        private readonly ICharityEmailService _emailService;
+        public Donating(IDonationService donationService, ILoggerFactory loggerFactory, UserManager<CharityUser> userManager, ICharityEmailService emailService)
         {
-
+            _donationService = donationService;
+            _userManager = userManager;
+            _logger = loggerFactory.CreateLogger("DonationController");
+            _emailService = emailService;
         }
+        #endregion
     }
 }

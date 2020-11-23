@@ -60,7 +60,9 @@ namespace Charity.Mvc
 			services.AddScoped<UserManager<CharityUser>>();
 			services.AddScoped<IDonationService, DonationService>();
 			services.AddScoped<IUserManagerService, UserManagerService>();
+			services.AddTransient<ICharityEmailService, CharityEmailService>();
 			services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("MailKitOptions").Get<MailKitOptions>()));
+			
 			services.AddControllersWithViews();
 			services.Configure<MvcOptions>(options => options.Filters.Add(new RequireHttpsAttribute()));
 
