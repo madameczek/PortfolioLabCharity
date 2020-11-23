@@ -36,6 +36,7 @@ namespace Charity.Mvc
 			services.AddDbContext<CharityDbContext>(options =>
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
+				//options.UseSqlServer(Configuration.GetConnectionString("SqLiteConnection"));
 			});
 			
 			services.AddIdentity<CharityUser, IdentityRole>(config =>

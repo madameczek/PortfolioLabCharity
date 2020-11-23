@@ -3,6 +3,7 @@ using Charity.Mvc.Models.ViewModels;
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NETCore.MailKit.Core;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,12 @@ namespace Charity.Mvc.Controllers
 
         private readonly IDonationService _donationService;
         private readonly ILogger _logger;
-        public Donating(IDonationService donationService, ILoggerFactory loggerFactory)
+        private readonly IEmailService _emailService;
+        public Donating(IDonationService donationService, ILoggerFactory loggerFactory, IEmailService emailService)
         {
             _donationService = donationService;
             _logger = loggerFactory.CreateLogger("DonationController");
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -76,11 +79,12 @@ namespace Charity.Mvc.Controllers
             var donationJson = JsonConvert.SerializeObject(model);
             var donation = JsonConvert.DeserializeObject<DonationModel>(donationJson);
             donation.PickUpOn = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
-            // create list of categories in relation to the donation
+            // create list of categories beeing in relation to the donation
             var categoryIds = new List<int>();
             model.Categories.Where(x=>x.IsChecked==true).ToList().ForEach(c => categoryIds.Add(c.Id));
             await _donationService.CreateDonationAsync(donation, model.InstitutionId, categoryIds);
-            return View();// thank you very much view
+
+            return View();
         }
 
         [NonAction]
@@ -107,6 +111,11 @@ namespace Charity.Mvc.Controllers
                 errors.Add("Na zorganizowanie odbioru musimy mieć przynajmniej 3 dni. Wyznacz termin za 3 dni lub późniejszy");
             }
             return errors.Count == 0;
+        }
+
+        private void SendEmailAsync()
+        {
+
         }
     }
 }

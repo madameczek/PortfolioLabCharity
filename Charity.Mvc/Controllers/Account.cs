@@ -41,7 +41,7 @@ namespace Charity.Mvc.Controllers
                     }
 
                     await _signInManager.SignOutAsync();
-                    var loginResult = await _signInManager.PasswordSignInAsync(user.Name, model.Password, true, false);
+                    var loginResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
                     if (loginResult.Succeeded)
                     {
                         _logger.LogInformation("User {User} logged in to application as {Role} ", user.Email, await _userManager.GetRolesAsync(user));
@@ -99,7 +99,8 @@ namespace Charity.Mvc.Controllers
                         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         var confirmationLink = Url.Action(nameof(EmailConfirmed), "Account", new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
                         _ = _emailService.SendAsync(
-                            user.Email, 
+                            //user.Email,
+                            "marek@adameczek.pl", 
                             "Registration confirmation", 
                             $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br />" +
                             $"<a href=\"{confirmationLink}\">Potwierdź adres email</a><br />" +

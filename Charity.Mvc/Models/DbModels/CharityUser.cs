@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Charity.Mvc.Models.DbModels
@@ -10,5 +11,7 @@ namespace Charity.Mvc.Models.DbModels
 
         [StringLength(100)]
         public string Surname { get; set; }
+
+        public ICollection<DonationModel> Donations { get; set; }
     }
 }

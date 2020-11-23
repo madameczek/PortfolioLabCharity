@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Charity.Mvc.Models.DbModels
 {
@@ -34,6 +32,8 @@ namespace Charity.Mvc.Models.DbModels
 
         // Relationships
         public ICollection<CategoryDonationModel> CategoryDonation { get; set; }
+
+        public CharityUser User { get; set; }
 
         [Required]
         public InstitutionModel Institution { get; set; }
