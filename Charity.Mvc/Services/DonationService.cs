@@ -18,7 +18,7 @@ namespace Charity.Mvc.Services
             _context = context;
         }
 
-        public List<Institution> GetInstitutionList(int skip = 0, int take = 4)
+        public List<InstitutionModel> GetInstitutionList(int skip = 0, int take = 4)
         {
             try
             {
@@ -34,6 +34,19 @@ namespace Charity.Mvc.Services
             catch (Exception e)
             {
                 _logger.LogError(e, "Error fetching institution list");
+                throw;
+            }
+        }
+
+        public InstitutionModel GetInstitution(int id)
+        {
+            try
+            {
+                return _context.Institutions.Where(i => i.Id == id).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error fetching institution {id}", id);
                 throw;
             }
         }
@@ -64,7 +77,7 @@ namespace Charity.Mvc.Services
             }
         }
 
-        public List<Category> GetCategoryList()
+        public List<CategoryModel> GetCategoryList()
         {
             try
             {
@@ -77,9 +90,28 @@ namespace Charity.Mvc.Services
             }
         }
 
-        public bool SaveDonation()
+        public Task CreateDonationAsync(DonationModel donation, int institutionId, List<int> categoryIds)
         {
-            return true;
+            try
+            {
+                donation.Institution = GetInstitution(institutionId);
+                _context.Donations.Add(donation);
+                var result = _context.SaveChanges();
+                
+                var categoryDonations = new List<CategoryDonationModel>();
+                categoryIds.ForEach(c => categoryDonations.Add(new CategoryDonationModel() { CategoryId = c, DonationId = donation.Id }));
+                _context.AddRange(categoryDonations);
+                _context.SaveChanges();
+
+                return Task.CompletedTask;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error creating a donation.");
+                return Task.FromException(e);
+            }
+
         }
+   
     }
 }

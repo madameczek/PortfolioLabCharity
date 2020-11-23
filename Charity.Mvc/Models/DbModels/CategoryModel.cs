@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Charity.Mvc.Models.DbModels
 {
-    public class Category
+    public class CategoryModel
     {
         public int Id { get; set; }
         [StringLength(100)]
         public string Name { get; set; }
 
         // Relationships
-        public ICollection<CategoryDonation> CategoryDonation { get; set; }
+        public ICollection<CategoryDonationModel> CategoryDonation { get; set; }
     }
 }

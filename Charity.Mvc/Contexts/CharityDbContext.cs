@@ -7,11 +7,12 @@ namespace Charity.Mvc.Contexts
 {
     public class CharityDbContext : IdentityDbContext
     {
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Institution> Institutions { get; set; }
+        public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<InstitutionModel> Institutions { get; set; }
         public new DbSet<CharityUser> Users { get; set; }
         public new DbSet<IdentityRole> Roles { get; set; }
-        public DbSet<Donation> Donations { get; set; }
+        public DbSet<DonationModel> Donations { get; set; }
+        public DbSet<CategoryDonationModel> CategoryDonation { get; set; }
 
         public CharityDbContext(DbContextOptions options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,39 +38,39 @@ namespace Charity.Mvc.Contexts
                     Name = "Administrator",
                     NormalizedName = "ADMINISTRATOR"
                 });
-            modelBuilder.Entity<Category>().HasData(
-                new Category
+            modelBuilder.Entity<CategoryModel>().HasData(
+                new CategoryModel
                 {
                     Id = 1,
                     Name = "ubrania, które nadają się do ponownego użycia",
                 },
-                new Category
+                new CategoryModel
                 {
                     Id = 2,
                     Name = "ubrania, do wyrzucenia",
                 },
-                new Category
+                new CategoryModel
                 {
                     Id = 3,
                     Name = "zabawki",
                 },
-                new Category
+                new CategoryModel
                 {
                     Id = 4,
                     Name = "książki",
                 },
-                new Category
+                new CategoryModel
                 {
                     Id = 5,
                     Name = "inne",
                 });
-            modelBuilder.Entity<Institution>().HasData(
-               new Institution
+            modelBuilder.Entity<InstitutionModel>().HasData(
+               new InstitutionModel
                {
                    Id = 1,
                    Name = "Fundacja \"Bez domu\"",
                    Description = "Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania"
-               }, new Institution
+               }, new InstitutionModel
                {
                    Id = 2,
                    Name = "Fundacja \"Dla dzieci\"",

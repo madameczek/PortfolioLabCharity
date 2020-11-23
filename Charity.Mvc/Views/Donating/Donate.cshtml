@@ -33,7 +33,7 @@
     <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/4</div>
 
-        <form asp-action=@nameof(Donation.Donate) method="post">
+        <form asp-action=@nameof(Donating.Donate) method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <!-- STEP 1: class .active is switching steps -->
             <div data-step="1" class="active">

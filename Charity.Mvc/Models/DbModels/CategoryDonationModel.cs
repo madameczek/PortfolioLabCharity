@@ -2,14 +2,14 @@
 
 namespace Charity.Mvc.Models.DbModels
 {
-    public class CategoryDonation
+    public class CategoryDonationModel
     {
         public int Id { get; set; }
         public int DonationId { get; set; }
         public int CategoryId { get; set; }
         [ForeignKey("DonationId")]
-        public Donation Donation { get; set; }
+        public DonationModel Donation { get; set; }
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public CategoryModel Category { get; set; }
     }
 }

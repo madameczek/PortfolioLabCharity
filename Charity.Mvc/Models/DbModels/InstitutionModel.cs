@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Charity.Mvc.Models.DbModels
 {
-    public class Institution
+    public class InstitutionModel
     {
         public int Id { get; set; }
         [StringLength(150)]

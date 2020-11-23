@@ -19,7 +19,29 @@ namespace Charity.Mvc.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Charity.Mvc.Models.DbModels.Category", b =>
+            modelBuilder.Entity("Charity.Mvc.Models.DbModels.CategoryDonationModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DonationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DonationId");
+
+                    b.ToTable("CategoryDonation");
+                });
+
+            modelBuilder.Entity("Charity.Mvc.Models.DbModels.CategoryModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,29 +84,7 @@ namespace Charity.Mvc.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Charity.Mvc.Models.DbModels.CategoryDonation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DonationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("DonationId");
-
-                    b.ToTable("CategoryDonation");
-                });
-
-            modelBuilder.Entity("Charity.Mvc.Models.DbModels.Donation", b =>
+            modelBuilder.Entity("Charity.Mvc.Models.DbModels.DonationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,6 +92,13 @@ namespace Charity.Mvc.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("InstitutionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -115,10 +122,12 @@ namespace Charity.Mvc.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InstitutionId");
+
                     b.ToTable("Donations");
                 });
 
-            modelBuilder.Entity("Charity.Mvc.Models.DbModels.Institution", b =>
+            modelBuilder.Entity("Charity.Mvc.Models.DbModels.InstitutionModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,9 +146,6 @@ namespace Charity.Mvc.Migrations
                         .HasMaxLength(150);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DonationId")
-                        .IsUnique();
 
                     b.ToTable("Institutions");
 
@@ -190,21 +196,21 @@ namespace Charity.Mvc.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "ad577fae-0762-4b81-90f3-ae2fd4872fa6",
+                            ConcurrencyStamp = "50081b0a-e847-4345-961f-a97cb9edaca3",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "eda9900a-7ff6-4163-8dfc-80a174f55fda",
+                            ConcurrencyStamp = "b50581e3-90e4-4e2b-9fd4-c40d486289cb",
                             Name = "SiteManager",
                             NormalizedName = "SITEMANAGER"
                         },
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "a69c3a9b-42e6-40b6-87d4-4220078d26df",
+                            ConcurrencyStamp = "a9e66cd8-98de-4f0d-854c-1881cbf68cd0",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -390,34 +396,36 @@ namespace Charity.Mvc.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.HasDiscriminator().HasValue("CharityUser");
                 });
 
-            modelBuilder.Entity("Charity.Mvc.Models.DbModels.CategoryDonation", b =>
+            modelBuilder.Entity("Charity.Mvc.Models.DbModels.CategoryDonationModel", b =>
                 {
-                    b.HasOne("Charity.Mvc.Models.DbModels.Category", "Category")
+                    b.HasOne("Charity.Mvc.Models.DbModels.CategoryModel", "Category")
                         .WithMany("CategoryDonation")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Charity.Mvc.Models.DbModels.Donation", "Donation")
+                    b.HasOne("Charity.Mvc.Models.DbModels.DonationModel", "Donation")
                         .WithMany("CategoryDonation")
                         .HasForeignKey("DonationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Charity.Mvc.Models.DbModels.Institution", b =>
+            modelBuilder.Entity("Charity.Mvc.Models.DbModels.DonationModel", b =>
                 {
-                    b.HasOne("Charity.Mvc.Models.DbModels.Donation", null)
-                        .WithOne("Institution")
-                        .HasForeignKey("Charity.Mvc.Models.DbModels.Institution", "DonationId")
+                    b.HasOne("Charity.Mvc.Models.DbModels.InstitutionModel", "Institution")
+                        .WithMany()
+                        .HasForeignKey("InstitutionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

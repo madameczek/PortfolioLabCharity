@@ -1,4 +1,5 @@
-﻿using Charity.Mvc.Models.ViewModels;
+﻿using Charity.Mvc.Models.DbModels;
+using Charity.Mvc.Models.ViewModels;
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,14 +13,14 @@ using System.Threading.Tasks;
 namespace Charity.Mvc.Controllers
 {
     [RequireHttps]
-    public class Donation : Controller
+    public class Donating : Controller
     {
         
         private List<string> errors;
 
         private readonly IDonationService _donationService;
         private readonly ILogger _logger;
-        public Donation(IDonationService donationService, ILoggerFactory loggerFactory)
+        public Donating(IDonationService donationService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;
             _logger = loggerFactory.CreateLogger("DonationController");
@@ -66,14 +67,20 @@ namespace Charity.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Confirmation(DonationViewModel model)
+        public async Task<IActionResult> Confirmation(DonationViewModel model)
         {
             if (model.Command == "Edit")
             {
                 return View("Donate", model);
             }
-            //_donationService
-            return View();// thank you very much
+            var donationJson = JsonConvert.SerializeObject(model);
+            var donation = JsonConvert.DeserializeObject<DonationModel>(donationJson);
+            donation.PickUpOn = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
+            // create list of categories in relation to the donation
+            var categoryIds = new List<int>();
+            model.Categories.Where(x=>x.IsChecked==true).ToList().ForEach(c => categoryIds.Add(c.Id));
+            await _donationService.CreateDonationAsync(donation, model.InstitutionId, categoryIds);
+            return View();// thank you very much view
         }
 
         [NonAction]

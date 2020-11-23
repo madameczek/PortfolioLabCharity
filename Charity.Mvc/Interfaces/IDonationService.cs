@@ -1,5 +1,6 @@
 ﻿using Charity.Mvc.Models.DbModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Charity.Mvc.Services
 {
@@ -11,9 +12,11 @@ namespace Charity.Mvc.Services
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns>Returns list of institutions.</returns>
-        List<Institution> GetInstitutionList(int skip = 0, int take = 4);
+        List<InstitutionModel> GetInstitutionList(int skip = 0, int take = 4);
+        public InstitutionModel GetInstitution(int id);
         int GetTotalNumberOfBags();
         int GetInstitutionCount();
-        List<Category> GetCategoryList();
+        List<CategoryModel> GetCategoryList();
+        public Task CreateDonationAsync(DonationModel donation, int institutionId, List<int> categoryIds);
     }
 }

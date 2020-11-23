@@ -9,7 +9,7 @@ namespace Charity.Mvc.Models.ViewModels
     // Used in Slide1 on Home/Index
     public class OrganisationsBagsViewModel
     {
-        public List<Institution> Institutions { get; set; }
+        public List<InstitutionModel> Institutions { get; set; }
         public int BagCount { get; set; }
         public int InstitutionCount { get; set; }
     }

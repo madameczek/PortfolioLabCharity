@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Charity.Mvc.Models.DbModels
 {
-    public class Donation
+    public class DonationModel
     {
         public int Id { get; set; }
         /// <summary>
@@ -33,9 +33,9 @@ namespace Charity.Mvc.Models.DbModels
         public string PickUpComment { get; set; }
 
         // Relationships
-        public ICollection<CategoryDonation> CategoryDonation { get; set; }
+        public ICollection<CategoryDonationModel> CategoryDonation { get; set; }
 
         [Required]
-        public Institution  Institution { get; set; }
+        public InstitutionModel Institution { get; set; }
     }
 }
