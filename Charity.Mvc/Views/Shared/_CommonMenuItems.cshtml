@@ -1,5 +1,6 @@
 ﻿@using Charity.Mvc.Controllers;
+
 <li><a asp-controller=@nameof(Home) asp-action=@nameof(Home.Index) class="btn btn--without-border active">Start</a></li>
-<li><a href="#steps" class="btn btn--without-border">O co chodzi?</a></li>
-<li><a href="#about-us" class="btn btn--without-border">O nas</a></li>
-<li><a href="#help" class="btn btn--without-border">Fundacje i organizacje</a></li>
+<li><a asp-controller=@nameof(Home) asp-action=@nameof(Home.Index) asp-fragment="steps" class="btn btn--without-border">O co chodzi?</a></li>
+<li><a asp-controller=@nameof(Home) asp-action=@nameof(Home.Index) asp-fragment="about-us" class="btn btn--without-border">O nas</a></li>
+<li><a asp-controller=@nameof(Home) asp-action=@nameof(Home.Index) asp-fragment="help" class="btn btn--without-border">Fundacje i organizacje</a></li>

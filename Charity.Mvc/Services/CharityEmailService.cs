@@ -1,11 +1,6 @@
 ﻿using Charity.Mvc.Models.DbModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using NETCore.MailKit;
 using NETCore.MailKit.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Charity.Mvc.Services
@@ -16,15 +11,25 @@ namespace Charity.Mvc.Services
         {
             _emailService.SendAsync(
                 donation.User.Email,
-                "Donation Confirmation",
-                $"<h3>Witaj {donation.User.Name}<h3><br /> Przyjęliśmy donację na: {donation.Quantity} worki.",
+                $"{donation.User.Name}, dziękujemy za darowiznę",
+                $"<h3>Witaj {donation.User.Name}<h3><br /> Przyjęliśmy donację na: {donation.Quantity} worki.<br />" +
+                $"Przygotuj paczkę do odbioru przez kuriera {donation.PickUpOn.ToString("yyyy.MM.dd")} około {donation.PickUpOn.ToString("HH:00")}.<br />" +
+                $"Dziękujemy.",
                 true);
             return Task.CompletedTask;
         }
 
-        public Task SendEmailConfirmation(CharityUser user)
+        public Task SendEmailConfirmation(string confirmationLink, CharityUser user)
         {
-            throw new NotImplementedException();
+            _emailService.SendAsync(
+                user.Email,
+                //"marek@adameczek.pl",
+                "Registration confirmation",
+                $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br />" +
+                $"<a href=\"{confirmationLink}\">Potwierdź adres email</a><br />" +
+                $"Zignoruj tę wiadomość, jeśli nie donowywałeś(aś) rejestracji.",
+                true);
+            return Task.CompletedTask;
         }
 
         private readonly IEmailService _emailService;

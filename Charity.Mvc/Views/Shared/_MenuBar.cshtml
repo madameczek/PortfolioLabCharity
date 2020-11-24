@@ -1,8 +1,10 @@
-﻿<nav class="container container--70">
+﻿@using Charity.Mvc.Controllers;
+
+<nav class="container container--70">
     @Html.PartialAsync("_UserActions").Result
 
     <ul>
         @Html.PartialAsync("_CommonMenuItems").Result
-        <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
+        <li><a asp-controller=@nameof(Home) asp-action=@nameof(Home.Index) asp-fragment="contact" class="btn btn--without-border">Kontakt</a></li>
     </ul>
 </nav>

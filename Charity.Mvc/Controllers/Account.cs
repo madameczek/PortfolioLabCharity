@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NETCore.MailKit.Core;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -89,21 +88,17 @@ namespace Charity.Mvc.Controllers
                     user.NormalizedUserName = user.UserName.ToUpper();
                     user.NormalizedEmail = user.Email.ToUpper();
 
+                    // Create user
                     var createUserResult = await _userManager.CreateAsync(user, model.Password);
                     if(createUserResult.Succeeded)
                     {
                         await _userManager.AddToRoleAsync(user, "User");
                         _logger.LogInformation("Created user with email {User}.", user.Email);
+                        // Prepare token & send it via email
                         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         var confirmationLink = Url.Action(nameof(EmailConfirmed), "Account", new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
-                        _ = _emailService.SendAsync(
-                            //user.Email,
-                            "marek@adameczek.pl", 
-                            "Registration confirmation", 
-                            $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br />" +
-                            $"<a href=\"{confirmationLink}\">Potwierdź adres email</a><br />" +
-                            $"Zignoruj tę wiadomość, jeśli nie donowywałeś(aś) rejestracji.",
-                            true);
+                        _ = _emailService.SendEmailConfirmation(confirmationLink, user);
+
                         return RedirectToAction(nameof(SuccessfulRegistration));
                     }
                     else
@@ -176,7 +171,7 @@ namespace Charity.Mvc.Controllers
         private readonly UserManager<CharityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserManagerService _userManagerService;
-        private readonly IEmailService _emailService;
+        private readonly ICharityEmailService _emailService;
         private readonly ILogger _logger;
         public Account(
             ILoggerFactory loggerFactory,
@@ -184,7 +179,7 @@ namespace Charity.Mvc.Controllers
             UserManager<CharityUser> userManager, 
             RoleManager<IdentityRole> roleManager, 
             IUserManagerService userManagerService,
-            IEmailService emailService)
+            ICharityEmailService emailService)
         {
             _logger = loggerFactory.CreateLogger("Account Controller");
             _signInManager = signInManager;
