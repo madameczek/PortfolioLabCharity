@@ -17,22 +17,45 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
+using Serilog;
+using Serilog.Events;
 
 namespace Charity.Mvc
 {
 	public class Startup
 	{
+		public IConfiguration Configuration { get; }
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-		}
 
-		public IConfiguration Configuration { get; }
+
+		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
+			Log.Logger = new LoggerConfiguration()
+				.MinimumLevel.Debug()
+				.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+				.Enrich.FromLogContext()
+#if DEBUG
+				.WriteTo.MSSqlServer(
+					Configuration.GetSection("Serilog").GetValue<string>("MsSlqlConnectionString"),
+					sinkOptions: new Serilog.Sinks.MSSqlServer.MSSqlServerSinkOptions { AutoCreateSqlTable = true, TableName = "Logs" })
+				.WriteTo.UdpSyslog(Configuration.GetSection("Serilog").GetValue<string>("SyslogServer"))
+#endif
+				.WriteTo.Console(
+					outputTemplate: Configuration.GetSection("Serilog").GetValue<string>("OutputTemplate1"),
+					restrictedToMinimumLevel: LogEventLevel.Debug)
+				.WriteTo.File(
+					AppDomain.CurrentDomain.BaseDirectory + @"/Log-.txt",
+					outputTemplate: Configuration.GetSection("Serilog").GetValue<string>("OutputTemplate1"),
+					restrictedToMinimumLevel: LogEventLevel.Information,
+					rollingInterval: RollingInterval.Month)
+				.CreateLogger();
+
 			services.AddDbContext<CharityDbContext>(options =>
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
