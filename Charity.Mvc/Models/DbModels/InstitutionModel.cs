@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Charity.Mvc.Models.DbModels
 {
@@ -11,7 +11,7 @@ namespace Charity.Mvc.Models.DbModels
         [StringLength(500)]
         public string Description { get; set; }
 
-        [ForeignKey("Donation")]
-        public int DonationId { get; set; }
+        // Relationships
+        public ICollection<DonationModel> Donations { get; set; }
     }
 }

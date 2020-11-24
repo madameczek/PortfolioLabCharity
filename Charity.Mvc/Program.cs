@@ -19,6 +19,7 @@ namespace Charity.Mvc
 		{
             try
             {
+                //if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Sqlite.db")) File.Create(AppDomain.CurrentDomain.BaseDirectory + @"Sqlite.db");
                 var host = CreateHostBuilder(args).Build();
                 Log.Logger.Information("App is starting...");
                 host.Run();

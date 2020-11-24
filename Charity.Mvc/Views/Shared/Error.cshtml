@@ -9,6 +9,14 @@
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
+        <ul>
+        @{if(ViewBag.Errors != null)
+            foreach (var item in ViewBag.Errors)
+          {
+                <li>@item</li>
+          }
+        }
+        </ul>
     </p>
 }
 

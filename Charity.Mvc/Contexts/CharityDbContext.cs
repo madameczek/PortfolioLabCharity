@@ -42,12 +42,12 @@ namespace Charity.Mvc.Contexts
                 new CategoryModel
                 {
                     Id = 1,
-                    Name = "ubrania, które nadają się do ponownego użycia",
+                    Name = "ubrania, dla dorosłych które nadają się do ponownego użycia",
                 },
                 new CategoryModel
                 {
                     Id = 2,
-                    Name = "ubrania, do wyrzucenia",
+                    Name = "ubrania, do dzieci do 12 lat",
                 },
                 new CategoryModel
                 {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -44,7 +45,15 @@ namespace Charity.Mvc.Controllers
                         _logger.LogInformation("User {User} logged in to application as {Role} ", user.Email, await _userManager.GetRolesAsync(user));
                         return RedirectToAction(nameof(Index), nameof(Home));
                     }
+
+                    if (loginResult.IsNotAllowed)
+                    {
+                        _logger.LogWarning("User {User} is not allowed to login.", model.Email);
+                        ModelState.AddModelError("", "Konto nie aktywne. Sprawdź skrzynkę email i kliknij link aktywacyjny.");
+                        return View(model);
+                    }
                     
+                    _logger.LogWarning("Invalid attempt to login from email {Email}", model.Email);
                     ModelState.AddModelError("", "Nie odnaleziono użytkownika lub błędne hasło");
                     return View(model);
                 }
@@ -95,10 +104,7 @@ namespace Charity.Mvc.Controllers
                         await _userManager.AddToRoleAsync(user, "User");
                         _logger.LogInformation("Created user with email {User}.", user.Email);
                         // Prepare token & send it via email
-                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var confirmationLink = Url.Action(nameof(EmailConfirmed), "Account", new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
-                        _ = _emailService.SendEmailConfirmation(confirmationLink, user);
-
+                        _ = GenerateAndSendTokeByEmail(user);
                         return RedirectToAction(nameof(SuccessfulRegistration));
                     }
                     else
@@ -132,6 +138,24 @@ namespace Charity.Mvc.Controllers
                 {
                     return View(nameof(EmailConfirmed));
                 }
+                else
+                {
+                    var enumerator = result.Errors.GetEnumerator();
+                    var errorList = new List<string>();
+                    while (enumerator.MoveNext())
+                    {
+                        errorList.Add(enumerator.Current.Description);
+                    }
+                    if (errorList.Contains("Invalid Token."))
+                    {
+                        _logger.LogError("Confirming Email error. Error list: {Error}", errorList);
+                        _ = GenerateAndSendTokeByEmail(identityUser);
+                        ViewBag.Message = "Twój link aktywacyjny wygasł.";
+                        return RedirectToAction(nameof(SuccessfulRegistration));
+                    }
+                    ViewBag.Errors = errorList;
+                    return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                }
             }
             return RedirectToAction(nameof(Error));
         }
@@ -143,7 +167,7 @@ namespace Charity.Mvc.Controllers
             return RedirectToAction(nameof(Index), nameof(Home));
         }
 
-        public IActionResult Error()
+        public IActionResult Error(List<string> errors)
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
@@ -164,6 +188,15 @@ namespace Charity.Mvc.Controllers
             }
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        [NonAction]
+        private Task GenerateAndSendTokeByEmail(CharityUser user)
+        {
+            var token = _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(nameof(EmailConfirmed), nameof(Account), new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
+            _ = _emailService.SendEmailConfirmation(confirmationLink, user);
+            return Task.CompletedTask;
         }
 
         #region Ctor & DI

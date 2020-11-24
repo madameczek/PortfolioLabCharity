@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Charity.Mvc.Contexts;
@@ -58,18 +59,18 @@ namespace Charity.Mvc
 
 			services.AddDbContext<CharityDbContext>(options =>
 			{
-				options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
-				//options.UseSqlServer(Configuration.GetConnectionString("SqLiteConnection"));
+				//options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
+				options.UseSqlite(Configuration.GetConnectionString("SqLiteConnection"));
 			});
-			
+
 			services.AddIdentity<CharityUser, IdentityRole>(config =>
 			{
-				config.Password.RequiredLength = 4;
-				config.Password.RequireDigit = false;
+				config.Password.RequiredLength = 6;
+				config.Password.RequireDigit = true;
 				config.Password.RequireUppercase = false;
 				config.Password.RequireNonAlphanumeric = false;
 				config.Password.RequireLowercase = false;
-				config.SignIn.RequireConfirmedEmail = false;
+				config.SignIn.RequireConfirmedEmail = true;
 				config.SignIn.RequireConfirmedPhoneNumber = false;
 				config.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
 			})

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Charity.Mvc.Migrations
+namespace Charity.Mvc.Migrations.Sqlite
 {
     public partial class Initial : Migration
     {
@@ -54,7 +54,7 @@ namespace Charity.Mvc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
@@ -67,10 +67,9 @@ namespace Charity.Mvc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 150, nullable: true),
-                    Description = table.Column<string>(maxLength: 500, nullable: true),
-                    DonationId = table.Column<int>(nullable: false)
+                    Description = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,7 +81,7 @@ namespace Charity.Mvc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -103,7 +102,7 @@ namespace Charity.Mvc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -188,7 +187,7 @@ namespace Charity.Mvc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Quantity = table.Column<int>(nullable: false),
                     Street = table.Column<string>(maxLength: 150, nullable: true),
                     City = table.Column<string>(maxLength: 50, nullable: true),
@@ -196,6 +195,7 @@ namespace Charity.Mvc.Migrations
                     PhoneNumber = table.Column<string>(maxLength: 50, nullable: true),
                     PickUpOn = table.Column<DateTime>(nullable: false),
                     PickUpComment = table.Column<string>(maxLength: 500, nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                     InstitutionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -207,28 +207,34 @@ namespace Charity.Mvc.Migrations
                         principalTable: "Institutions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Donations_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryDonationModel",
+                name: "CategoryDonation",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     DonationId = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryDonationModel", x => x.Id);
+                    table.PrimaryKey("PK_CategoryDonation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CategoryDonationModel_Categories_CategoryId",
+                        name: "FK_CategoryDonation_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CategoryDonationModel_Donations_DonationId",
+                        name: "FK_CategoryDonation_Donations_DonationId",
                         column: x => x.DonationId,
                         principalTable: "Donations",
                         principalColumn: "Id",
@@ -238,33 +244,52 @@ namespace Charity.Mvc.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "1", "2ebdd6f4-0e68-454c-99ed-ec8c86b1a447", "User", "USER" },
-                    { "2", "b581f770-991b-4cd2-87d4-74ea20de1684", "SiteManager", "SITEMANAGER" },
-                    { "3", "79834643-c964-4bb1-a4f0-1f41b3373bbe", "Administrator", "ADMINISTRATOR" }
-                });
+                values: new object[] { "1", "547a2b08-e58e-4256-ad99-1c4206b0d6fa", "User", "USER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "2", "1c693970-772f-409a-9c93-57c803e4405f", "SiteManager", "SITEMANAGER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "3", "5bcd6b12-7fa9-4f9f-9346-be742e60bb27", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "ubrania, które nadają się do ponownego użycia" },
-                    { 2, "ubrania, do wyrzucenia" },
-                    { 3, "zabawki" },
-                    { 4, "książki" },
-                    { 5, "inne" }
-                });
+                values: new object[] { 1, "ubrania, dla dorosłych które nadają się do ponownego użycia" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 2, "ubrania, do dzieci do 12 lat" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 3, "zabawki" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 4, "książki" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 5, "inne" });
 
             migrationBuilder.InsertData(
                 table: "Institutions",
-                columns: new[] { "Id", "Description", "DonationId", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania", 0, "Fundacja \"Bez domu\"" },
-                    { 2, "Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej", 0, "Fundacja \"Dla dzieci\"" }
-                });
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[] { 1, "Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania", "Fundacja \"Bez domu\"" });
+
+            migrationBuilder.InsertData(
+                table: "Institutions",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[] { 2, "Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej", "Fundacja \"Dla dzieci\"" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -275,8 +300,7 @@ namespace Charity.Mvc.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -302,23 +326,27 @@ namespace Charity.Mvc.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryDonationModel_CategoryId",
-                table: "CategoryDonationModel",
+                name: "IX_CategoryDonation_CategoryId",
+                table: "CategoryDonation",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryDonationModel_DonationId",
-                table: "CategoryDonationModel",
+                name: "IX_CategoryDonation_DonationId",
+                table: "CategoryDonation",
                 column: "DonationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Donations_InstitutionId",
                 table: "Donations",
                 column: "InstitutionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Donations_UserId",
+                table: "Donations",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -339,13 +367,10 @@ namespace Charity.Mvc.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CategoryDonationModel");
+                name: "CategoryDonation");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");
@@ -355,6 +380,9 @@ namespace Charity.Mvc.Migrations
 
             migrationBuilder.DropTable(
                 name: "Institutions");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

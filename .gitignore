@@ -256,3 +256,9 @@ paket-files/
 
 # Html templates
 [Rr]esources/
+
+# Sqlite
+Sqlite.db
+
+# Log files
+Log-*.txt
