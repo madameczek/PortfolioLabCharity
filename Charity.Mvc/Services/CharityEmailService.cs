@@ -24,7 +24,7 @@ namespace Charity.Mvc.Services
             _emailService.SendAsync(
                 user.Email,
                 //"marek@adameczek.pl",
-                "Registration confirmation",
+                $"{user.Name}, potwierdź rejestrację",
                 $"<h3>Kliknij link, by potwierdzić rejestrację do serwisu 'Charity'</h3><br />" +
                 $"<a href=\"{confirmationLink}\">Potwierdź adres email</a><br />" +
                 $"Zignoruj tę wiadomość, jeśli nie donowywałeś(aś) rejestracji.",

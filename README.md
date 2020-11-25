@@ -15,6 +15,7 @@ Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacj
 - Wysłanie potwierdzenia zlecenia na email zarejestrowanego użytkownika
 - Rejestracja użytkownika
 - Potwierdzenie rejestacji przez email z tokenem
+- [Działające demo w chmurze Azure](https://drugie-zycie.azurewebsites.net)
 
 ## Do dokończenia
 

@@ -54,13 +54,21 @@ namespace Charity.Mvc
 					AppDomain.CurrentDomain.BaseDirectory + @"/Log-.txt",
 					outputTemplate: Configuration.GetSection("Serilog").GetValue<string>("OutputTemplate1"),
 					restrictedToMinimumLevel: LogEventLevel.Information,
-					rollingInterval: RollingInterval.Month)
+					rollingInterval: RollingInterval.Day)
 				.CreateLogger();
 
 			services.AddDbContext<CharityDbContext>(options =>
 			{
-				//options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
-				options.UseSqlite(Configuration.GetConnectionString("SqLiteConnection"));
+				var host = Configuration.GetValue<string>("HOST", defaultValue: "Local");
+				if (host == "Local")
+                {
+					options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
+				}
+                else
+                {
+					// Remember to set environment variable in Azure to execute this
+					options.UseSqlite(Configuration.GetConnectionString("SqLiteConnection"));
+				}
 			});
 
 			services.AddIdentity<CharityUser, IdentityRole>(config =>

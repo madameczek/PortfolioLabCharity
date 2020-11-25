@@ -146,12 +146,12 @@ namespace Charity.Mvc.Controllers
                     {
                         errorList.Add(enumerator.Current.Description);
                     }
-                    if (errorList.Contains("Invalid Token."))
+                    if (errorList.Contains("Invalid token."))
                     {
                         _logger.LogError("Confirming Email error. Error list: {Error}", errorList);
                         _ = GenerateAndSendTokeByEmail(identityUser);
                         ViewBag.Message = "Twój link aktywacyjny wygasł.";
-                        return RedirectToAction(nameof(SuccessfulRegistration));
+                        return View(nameof(SuccessfulRegistration));
                     }
                     ViewBag.Errors = errorList;
                     return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -176,6 +176,7 @@ namespace Charity.Mvc.Controllers
         private string RemoveDiacritics(string text)
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
+            normalizedString = normalizedString.Replace('ł', 'l');
             var stringBuilder = new StringBuilder();
 
             foreach (var c in normalizedString)
@@ -191,12 +192,12 @@ namespace Charity.Mvc.Controllers
         }
 
         [NonAction]
-        private Task GenerateAndSendTokeByEmail(CharityUser user)
+        private async Task GenerateAndSendTokeByEmail(CharityUser user)
         {
-            var token = _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action(nameof(EmailConfirmed), nameof(Account), new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
             _ = _emailService.SendEmailConfirmation(confirmationLink, user);
-            return Task.CompletedTask;
+            return;
         }
 
         #region Ctor & DI

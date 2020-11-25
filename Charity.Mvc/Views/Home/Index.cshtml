@@ -53,14 +53,17 @@
         </div>
     </div>
 
+    @if (!User.Identity.IsAuthenticated)
+    {
     <a asp-controller=@nameof(Account) asp-action=@nameof(Account.Registration) class="btn btn--large">Załóż konto</a>
+    }
 </section>
 
 <section id="about-us" class="about-us">
     <div class="about-us--text">
         <h2>O nas</h2>
         <p>To jest aplikacja testowa. Kod i opis znajdziesz na <a href="https://github.com/madameczek/PortfolioLabCharity">Github.</a></p>
-        <p>Zlecenia przesłane za jej pomocą nie spowodują odbioru darów. Ale kto wie, może któregoś dnia zostanie wdrożona do użytku powszechnego... :)</p>
+        <p>Zlecenia przesłane za jej pomocą nie spowodują odbioru darów. Ale kto wie, może któregoś dnia będzie to możliwe :)</p>
         <p>O cookies: Aplikacja zapisuje tylko niezbędne ciastka sesyjne.
         Dane osobowe są gromadzone w bazie aplikacji i przetwarzane tylko w celu demonstracji jej działania. 
         Możesz żądać ich usunięcia wysyłając wiadomość przez formularz kontaktowy.</p>
