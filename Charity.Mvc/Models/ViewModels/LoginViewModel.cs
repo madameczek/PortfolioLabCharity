@@ -9,7 +9,7 @@ namespace Charity.Mvc.Models.ViewModels
         [Required]
         [Display(Prompt = "Email")]
         [DataType(DataType.EmailAddress, ErrorMessage ="Nie wygląda to jak adres email")]
-        public string Email { get => _email; set => _email = value.Trim(); }
+        public string Email { get => _email; set => _email = value?.Trim(); }
         [Required]
         [Display(Prompt = "Hasło")]
         [DataType(DataType.Password)]
