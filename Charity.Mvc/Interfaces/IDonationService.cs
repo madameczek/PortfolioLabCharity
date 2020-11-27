@@ -18,5 +18,6 @@ namespace Charity.Mvc.Services
         int GetInstitutionCount();
         List<CategoryModel> GetCategoryList();
         public Task CreateDonationAsync(DonationModel donation, int institutionId, List<int> categoryIds);
+        public List<DonationModel> GetDonations(string userId);
     }
 }

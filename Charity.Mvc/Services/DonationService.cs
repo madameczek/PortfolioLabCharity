@@ -90,6 +90,21 @@ namespace Charity.Mvc.Services
             }
         }
 
+        public List<DonationModel> GetDonations(string userId)
+        {
+            try
+            {
+                // Using lazy loading
+                var donations = _context.Donations.Where(d => d.User.Id == userId).OrderByDescending(d=>d.PickUpOn).ToList();
+                return donations;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error fetching donation list for {User}", userId);
+                throw;
+            }
+        }
+
         public Task CreateDonationAsync(DonationModel donation, int institutionId, List<int> categoryIds)
         {
             try

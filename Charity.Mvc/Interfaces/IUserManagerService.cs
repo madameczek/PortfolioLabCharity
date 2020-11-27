@@ -11,5 +11,7 @@ namespace Charity.Mvc.Services
         public bool IsEmailUnique(string email);
 
         public CharityUser GetUserByEmail(string email);
+
+        public string GetFirstNameById(string userId);
     }
 }

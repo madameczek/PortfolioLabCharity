@@ -12,6 +12,7 @@ namespace Charity.Mvc.Models.DbModels
         [StringLength(100)]
         public string Surname { get; set; }
 
-        public ICollection<DonationModel> Donations { get; set; }
+        // Relationships
+        public virtual ICollection<DonationModel> Donations { get; set; }
     }
 }

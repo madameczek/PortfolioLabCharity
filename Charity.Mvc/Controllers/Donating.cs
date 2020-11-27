@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Charity.Mvc.Controllers
 {
@@ -58,7 +59,7 @@ namespace Charity.Mvc.Controllers
 
             return View("Summary", model);
         }
-        // ^((\+|00)48)?([1-9]\d{8}|[1-9 -.]{8,12})
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirmation(DonationViewModel model)
@@ -101,6 +102,14 @@ namespace Charity.Mvc.Controllers
             return RedirectToAction(nameof(Home.Index), nameof(Home));
         }
 
+        [Authorize]
+        public IActionResult GetDonations()
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var donations = _donationService.GetDonations(userId);
+            return View(donations);
+        }
+
         [NonAction]
         // This method validates model against requirements additional to these set by attributes.
         // If validation fails, add message to ModelState dictionary
@@ -116,7 +125,7 @@ namespace Charity.Mvc.Controllers
             {
                 if (!IsPhoneNumberValid(model.PhoneNumber))
                 {
-                    errors.Add("Sprawdź numer telefonu. Może zawierać cyfry, spacje i znaki '-', '.' oraz '+'. Przykład: 0048 123 456 789");
+                    errors.Add("Sprawdź numer telefonu. Dozwolone znaki: 0-9, '+- .'. Przykład: 0048.123 456 789");
                 }
             }
 

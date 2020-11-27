@@ -1,14 +1,16 @@
 ﻿@using Charity.Mvc.Controllers
+@using Charity.Mvc.Services
+@inject IUserManagerService manager
 @{
     if (User.Identity.IsAuthenticated)
     {
         <ul class="nav--actions">
             <li class="logged-user">
-                Witaj @User.Identity.Name.Split("_").First()
+                Witaj @manager.GetFirstNameById(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value)
                 <ul class="dropdown">
                     <li><a href="#">Profil</a></li>
                     <li><a href="#">Ustawienia</a></li>
-                    <li><a href="#">Moje zbiórki</a></li>
+                    <li>@Html.ActionLink("Moje zbiórki", nameof(Donating.GetDonations), nameof(Donating))</li>
                     <li><a asp-controller=@nameof(Account) asp-action=@nameof(Account.Logout)>Wyloguj</a></li>
                 </ul>
             </li>

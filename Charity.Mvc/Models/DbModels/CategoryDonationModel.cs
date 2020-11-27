@@ -7,9 +7,11 @@ namespace Charity.Mvc.Models.DbModels
         public int Id { get; set; }
         public int DonationId { get; set; }
         public int CategoryId { get; set; }
+
+        // Relationships
         [ForeignKey("DonationId")]
-        public DonationModel Donation { get; set; }
+        public virtual DonationModel Donation { get; set; }
         [ForeignKey("CategoryId")]
-        public CategoryModel Category { get; set; }
+        public virtual CategoryModel Category { get; set; }
     }
 }

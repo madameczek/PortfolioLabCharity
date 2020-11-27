@@ -62,11 +62,12 @@ namespace Charity.Mvc
 				var host = Configuration.GetValue<string>("HOST", defaultValue: "Local");
 				if (host == "Local")
                 {
+					options.UseLazyLoadingProxies();
 					options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
 				}
                 else
                 {
-					// Remember to set environment variable in Azure to execute this
+					// Remember to set HOST environment variable in Azure to execute this
 					options.UseSqlite(Configuration.GetConnectionString("SqLiteConnection"));
 				}
 			});

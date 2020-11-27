@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Charity.Mvc.Models.DbModels.DonationModel>
+
+@{
+    ViewData["Title"] = "Lista darowizn";
+}
+
+<header class="header--form-page">
+    @Html.PartialAsync("_MenuBar").Result
+
+    <div class="slogan container container--90">
+
+    </div>
+</header>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Data odbioru
+            </th>
+            <th>
+                Worki
+            </th>
+            <th>
+                Dla
+            </th>
+            <th>
+                Kategoria darów
+            </th>
+            <th>
+                Komentarz
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var donation in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => donation.PickUpOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => donation.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => donation.Institution.Name)
+            </td>
+            <td>
+                @foreach (var categoryDonation in donation.CategoryDonation.Where(cd => cd.DonationId == donation.Id).ToList())
+                {
+                    <p>@categoryDonation.Category.Name</p>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => donation.PickUpComment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

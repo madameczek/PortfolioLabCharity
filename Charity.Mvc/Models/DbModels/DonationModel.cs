@@ -31,11 +31,11 @@ namespace Charity.Mvc.Models.DbModels
         public string PickUpComment { get; set; }
 
         // Relationships
-        public ICollection<CategoryDonationModel> CategoryDonation { get; set; }
+        public virtual ICollection<CategoryDonationModel> CategoryDonation { get; set; }
 
-        public CharityUser User { get; set; }
+        public virtual CharityUser User { get; set; }
 
         [Required]
-        public InstitutionModel Institution { get; set; }
+        public virtual InstitutionModel Institution { get; set; }
     }
 }
