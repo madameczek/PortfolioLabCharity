@@ -71,16 +71,17 @@ namespace Charity.Mvc
 				}
 			});
 
-			services.AddIdentity<CharityUser, IdentityRole>(config =>
+			services.AddIdentity<CharityUser, IdentityRole>(options =>
 			{
-				config.Password.RequiredLength = 6;
-				config.Password.RequireDigit = true;
-				config.Password.RequireUppercase = false;
-				config.Password.RequireNonAlphanumeric = false;
-				config.Password.RequireLowercase = false;
-				config.SignIn.RequireConfirmedEmail = true;
-				config.SignIn.RequireConfirmedPhoneNumber = false;
-				config.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
+				options.Password.RequiredLength = 6;
+				options.Password.RequireDigit = true;
+				options.Password.RequireUppercase = false;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireLowercase = false;
+				options.User.RequireUniqueEmail = true;
+				options.SignIn.RequireConfirmedEmail = true;
+				options.SignIn.RequireConfirmedPhoneNumber = false;
+				options.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
 			})
 				.AddEntityFrameworkStores<CharityDbContext>()
 				.AddDefaultTokenProviders()
@@ -93,7 +94,7 @@ namespace Charity.Mvc
 			services.AddScoped<IDonationService, DonationService>();
 			services.AddScoped<IUserManagerService, UserManagerService>();
 			services.AddTransient<ICharityEmailService, CharityEmailService>();
-			services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("MailKitOptions").Get<MailKitOptions>()));
+			services.AddMailKit(options => options.UseMailKit(Configuration.GetSection("MailKitOptions").Get<MailKitOptions>()));
 			
 			services.AddControllersWithViews();
 			services.Configure<MvcOptions>(options => options.Filters.Add(new RequireHttpsAttribute()));

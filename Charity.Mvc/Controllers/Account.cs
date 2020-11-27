@@ -92,7 +92,7 @@ namespace Charity.Mvc.Controllers
                         Surname = model.Surname,
                         Email = model.Email,
                     };
-                    user.UserName = $"{user.Name}_{user.Surname}".Replace(" ", "_");
+                    user.UserName = $"{user.Name}{user.Surname}".Replace(" ", "_");
                     user.UserName = RemoveDiacritics(user.UserName);
                     user.NormalizedUserName = user.UserName.ToUpper();
                     user.NormalizedEmail = user.Email.ToUpper();

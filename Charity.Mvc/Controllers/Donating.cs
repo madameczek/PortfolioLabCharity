@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace Charity.Mvc.Controllers
 {
@@ -23,6 +24,7 @@ namespace Charity.Mvc.Controllers
         {
             try
             {
+                // Prepare ViewModel with categories and institutions to be used when user makes a selection
                 var categories = JsonConvert.SerializeObject(_donationService.GetCategoryList());
                 var institutions = JsonConvert.SerializeObject(_donationService.GetInstitutionList(take: 0));
                 var model = new DonationViewModel()
@@ -56,7 +58,7 @@ namespace Charity.Mvc.Controllers
 
             return View("Summary", model);
         }
-
+        // ^((\+|00)48)?([1-9]\d{8}|[1-9 -.]{8,12})
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Confirmation(DonationViewModel model)
@@ -112,11 +114,12 @@ namespace Charity.Mvc.Controllers
             
             if (model.PhoneNumber != null)
             {
-                if (!model.PhoneNumber.All(c => char.IsDigit(c) || c == ' ' || c == '-'))
+                if (!IsPhoneNumberValid(model.PhoneNumber))
                 {
-                    errors.Add("Sprawdź numer telefonu. Może zawierać tylko cyfry, spacje i znak '-'. Znak + zamień na dwa zera.");
+                    errors.Add("Sprawdź numer telefonu. Może zawierać cyfry, spacje i znaki '-', '.' oraz '+'. Przykład: 0048 123 456 789");
                 }
             }
+
             if (!(model.PickUpDateOn > new DateTime(
                 year: DateTime.Now.Year, 
                 month: DateTime.Now.Month, 
@@ -125,6 +128,13 @@ namespace Charity.Mvc.Controllers
                 errors.Add("Na zorganizowanie odbioru musimy mieć przynajmniej 3 dni. Wyznacz termin za 3 dni lub późniejszy");
             }
             return errors.Count == 0;
+        }
+
+        [NonAction]
+        private bool IsPhoneNumberValid(string numberToCheck)
+        {
+            Regex regex = new Regex(pattern: @"^((00|\+)[1-9]\d)?[\- \.]?[1-9]\d{2}[\- \.]?\d{3}[\- \.]?\d{3}$");
+            return regex.IsMatch(numberToCheck);
         }
 
         #region Ctor & DI

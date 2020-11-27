@@ -19,6 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Sqlite.db-shm" />
+    <None Remove="Sqlite.db-wal" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Migrations\MsSql\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
