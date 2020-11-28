@@ -1,23 +1,31 @@
-﻿@model Charity.Mvc.Models.ViewModels.RegistrationViewModel
+﻿@using Charity.Mvc.Controllers
+@model Charity.Mvc.Models.ViewModels.EditProfileViewModel
+
 @{
-    ViewData["Title"] = "Rejestracja";
+    ViewData["Title"] = "Edytuj Profil";
 }
 
 <header>
     @Html.PartialAsync("_MenuBar").Result
 </header>
 
+
 <section class="login-page">
-    <h2>Załóż konto</h2>
-    <form asp-action="Registration" method="post">
+    <h2>Edytuj dane</h2>
+    <form asp-action="EditProfile" method="post">
         <div class="text-danger">
-        @{
-            var errors = ViewData.ModelState.Where(n => n.Value.Errors.Count() > 0).ToList();
-            if (errors != null)
-            {
-                errors.ForEach(e => e.Value.Errors.ToList().ForEach(i=>i.ErrorMessage.ToString()));
+            @{
+                var errors = ViewData.ModelState.Where(n => n.Value.Errors.Count() > 0).ToList();
+                if (errors != null)
+                {
+                    errors.ForEach(e => e.Value.Errors.ToList().ForEach(i => i.ErrorMessage.ToString()));
+                }
             }
-        }
+        </div>
+        <div class="form-group">
+            <p style="font-size: 1.6em">@Html.DisplayTextFor(u => u.Email)</p>
+            <input asp-for="Id" type="hidden" value=@Model.Id />
+            <input asp-for="Email" type="hidden" value=@Model.Email />
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -29,8 +37,8 @@
             <span asp-validation-for="Surname" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input asp-for="Email" type="email" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+            <input asp-for="PhoneNumber" type="tel" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input asp-for="Password" type="password" />
@@ -40,15 +48,12 @@
             <input asp-for="RepeatPassword" type="password" />
             <span asp-validation-for="RepeatPassword" class="text-danger"></span>
         </div>
-
         <div class="form-group form-group--buttons">
-            <a asp-action="Login" class="btn btn--without-border">Zaloguj się</a>
-            <button class="btn" type="submit">Załóż konto</button>
+            <button class="btn" type="submit">Zmień dane</button>
         </div>
     </form>
 </section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{await Html.RenderPartialAsync("_BootstrapScriptsPartial");}
 }

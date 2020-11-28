@@ -50,7 +50,7 @@
   
   <ItemGroup>
     <None Update="Sqlite.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

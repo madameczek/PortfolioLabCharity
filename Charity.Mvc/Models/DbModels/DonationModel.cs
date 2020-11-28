@@ -25,6 +25,7 @@ namespace Charity.Mvc.Models.DbModels
         [StringLength(50)]
         public string PhoneNumber { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:yyyy.MM.dd}")]
         public DateTime PickUpOn { get; set; }
 
         [StringLength(500)]

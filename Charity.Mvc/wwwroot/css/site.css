@@ -529,6 +529,10 @@ form .form-group {
   margin-bottom: 20px;
 }
 
+form .form-group div{
+    font-size: 1.6em;
+}
+
 /* line 10, scss/modules/_forms.scss */
 form .form-group input:not([type="checkbox"]):not([type="radio"]),
 form .form-group textarea {
@@ -1346,7 +1350,7 @@ header nav ul li:last-of-type {
 .about-us--text p {
   width: 70%;
   font-size: 2.2rem;
-  line-height: 2em;
+  line-height: 1.5em;
 }
 
 /* line 22, scss/modules/homepage-sections/_about-us.scss */

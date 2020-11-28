@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Charity.Mvc.Contexts;
 using Charity.Mvc.CustomTokenProviders;
-using Charity.Mvc.Models;
 using Charity.Mvc.Models.DbModels;
 using Charity.Mvc.Services;
 using Microsoft.AspNetCore.Builder;
@@ -67,6 +65,7 @@ namespace Charity.Mvc
 				}
                 else
                 {
+					options.UseLazyLoadingProxies();
 					// Remember to set HOST environment variable in Azure to execute this
 					options.UseSqlite(Configuration.GetConnectionString("SqLiteConnection"));
 				}

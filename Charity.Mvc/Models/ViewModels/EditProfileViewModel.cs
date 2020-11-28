@@ -2,12 +2,14 @@
 
 namespace Charity.Mvc.Models.ViewModels
 {
-    public class RegistrationViewModel
+    public class EditProfileViewModel
     {
         private string _name;
         private string _surname;
         private string _email;
         private string _phoneNumber;
+
+        public string Id { get; set; }
 
         [Required]
         [Display(Prompt = "podaj imię")]
@@ -17,19 +19,14 @@ namespace Charity.Mvc.Models.ViewModels
         [Display(Prompt = "podaj nazwisko")]
         public string Surname { get => _surname; set => _surname = value?.Trim(); }
 
-        [Required]
-        [Display(Prompt = "Email")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Nie wygląda to jak adres email")]
         public string Email { get => _email; set => _email = value?.Trim(); }
 
         [Display(Prompt = "podaj telefon", Name = "Telefon")]
         public string PhoneNumber { get => _phoneNumber; set => _phoneNumber = value?.Trim(); }
 
-        [Required]
         [Display(Prompt = "podaj hasło")]
         public string Password { get; set; }
 
-        [Required]
         [Compare("Password")]
         [Display(Prompt = "powtórz hasło")]
         public string RepeatPassword { get; set; }

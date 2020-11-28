@@ -6,9 +6,9 @@
     {
         <ul class="nav--actions">
             <li class="logged-user">
-                Witaj @manager.GetFirstNameById(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value)
+                Witaj @manager.GetFirstNameById(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier")).Value)!
                 <ul class="dropdown">
-                    <li><a href="#">Profil</a></li>
+                    <li>@Html.ActionLink("Profil", nameof(Account.EditProfile), nameof(Account))</li>
                     <li><a href="#">Ustawienia</a></li>
                     <li>@Html.ActionLink("Moje zbiórki", nameof(Donating.GetDonations), nameof(Donating))</li>
                     <li><a asp-controller=@nameof(Account) asp-action=@nameof(Account.Logout)>Wyloguj</a></li>

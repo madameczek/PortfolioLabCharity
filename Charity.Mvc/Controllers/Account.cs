@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Charity.Mvc.Controllers
@@ -161,10 +163,55 @@ namespace Charity.Mvc.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> EditProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var temp = JsonConvert.SerializeObject(user, settings: new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            var newUser = JsonConvert.DeserializeObject<EditProfileViewModel>(temp);
+            return View(newUser);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.PhoneNumber != null && !IsPhoneNumberValid(model.PhoneNumber))
+                {
+                    ModelState.AddModelError("", "Sprawdź ne telefonu. Może zawierać znaki: 0-9, '+- .'. np: 0048.501-502-503.");
+                    return View(model);
+                }
+
+                try
+                {
+                    var identityUser = await _userManager.GetUserAsync(User);
+
+                    identityUser.Name = model.Name;
+                    identityUser.Surname = model.Surname;
+                    identityUser.PhoneNumber = model.PhoneNumber;
+
+                    var result = await _userManager.UpdateAsync(identityUser);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Home.Index), nameof(Home));
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error updating user {User}", model.Email);
+                    throw;
+                }
+            }
+            return View(model);
+        }
+
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(Index), nameof(Home));
+            return RedirectToAction(nameof(Home.Index), nameof(Home));
         }
 
         public IActionResult Error(List<string> errors)
@@ -198,6 +245,13 @@ namespace Charity.Mvc.Controllers
             var confirmationLink = Url.Action(nameof(EmailConfirmed), nameof(Account), new { token, user = user.Id }, Request.Scheme, Request.Host.ToString());
             _ = _emailService.SendEmailConfirmation(confirmationLink, user);
             return;
+        }
+
+        [NonAction]
+        private bool IsPhoneNumberValid(string numberToCheck)
+        {
+            Regex regex = new Regex(pattern: @"^((00|\+)48)?[\- \.]?[1-9]\d{2}[\- \.]?\d{3}[\- \.]?\d{3}$");
+            return regex.IsMatch(numberToCheck);
         }
 
         #region Ctor & DI
