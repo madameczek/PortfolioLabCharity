@@ -167,7 +167,9 @@ namespace Charity.Mvc.Controllers
         public async Task<IActionResult> EditProfile()
         {
             var user = await _userManager.GetUserAsync(User);
-            var temp = JsonConvert.SerializeObject(user, settings: new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            var temp = JsonConvert.SerializeObject(
+                user, 
+                settings: new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             var newUser = JsonConvert.DeserializeObject<EditProfileViewModel>(temp);
             return View(newUser);
         }

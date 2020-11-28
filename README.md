@@ -14,12 +14,15 @@ Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacj
   - Walidacja wprowadzanych danych przez atrybuty modelu oraz dodatkową logiką
 - Wysłanie potwierdzenia zlecenia na email zarejestrowanego użytkownika
 - Rejestracja użytkownika
-- Potwierdzenie rejestacji przez email z tokenem
+- Potwierdzenie rejestacji (aktywacja konta) przez email z tokenem
+- Edycja danych użytkownika
+- Zmiana hasła
+- Lista darów użytkownika (dla zarejestrowanego użytkownika)
 - [Działające demo w chmurze Azure](https://drugie-zycie.azurewebsites.net)
 
 ## Do dokończenia
 
-- Zarządznie kontem użytkownika
+- Reset hasła
 - Obsługa formularza kontaktowego
 
 ## Użyte języki

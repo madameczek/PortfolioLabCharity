@@ -12,7 +12,7 @@
     </div>
 </header>
 
-<table class="table">
+<table style="font-size: 1.5rem;" class="col table-bordered table-info">
     <thead>
         <tr>
             <th>
@@ -33,27 +33,28 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var donation in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => donation.PickUpOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => donation.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => donation.Institution.Name)
-            </td>
-            <td>
-                @foreach (var categoryDonation in donation.CategoryDonation.Where(cd => cd.DonationId == donation.Id).ToList())
-                {
-                    <p>@categoryDonation.Category.Name</p>
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => donation.PickUpComment)
-            </td>
-        </tr>
-}
+        @foreach (var donation in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => donation.PickUpOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => donation.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => donation.Institution.Name)
+                </td>
+                <td>
+                    @foreach (var categoryDonation in donation.CategoryDonation.Where(cd => cd.DonationId == donation.Id).ToList())
+                    {
+                        <p>@categoryDonation.Category.Name</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => donation.PickUpComment)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
