@@ -6,10 +6,7 @@ namespace Charity.Mvc.Models.ViewModels
     {
         private string _name;
         private string _surname;
-        private string _email;
         private string _phoneNumber;
-
-        public string Id { get; set; }
 
         [Required]
         [Display(Prompt = "podaj imię")]
@@ -19,16 +16,19 @@ namespace Charity.Mvc.Models.ViewModels
         [Display(Prompt = "podaj nazwisko")]
         public string Surname { get => _surname; set => _surname = value?.Trim(); }
 
-        public string Email { get => _email; set => _email = value?.Trim(); }
+        public string Email { get; set; }
 
         [Display(Prompt = "podaj telefon", Name = "Telefon")]
         public string PhoneNumber { get => _phoneNumber; set => _phoneNumber = value?.Trim(); }
 
-        [Display(Prompt = "podaj hasło")]
+        [Display(Prompt = "podaj obecne hasło")]
+        public string CurrentPassword { get; set; }
+
+        [Display(Prompt = "podaj nowe hasło")]
         public string Password { get; set; }
 
         [Compare("Password")]
-        [Display(Prompt = "powtórz hasło")]
+        [Display(Prompt = "powtórz nowe hasło")]
         public string RepeatPassword { get; set; }
     }
 }

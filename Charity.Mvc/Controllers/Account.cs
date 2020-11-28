@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -186,13 +187,38 @@ namespace Charity.Mvc.Controllers
 
                 try
                 {
-                    var identityUser = await _userManager.GetUserAsync(User);
+                    var user = await _userManager.GetUserAsync(User);
+                    user.Name = model.Name;
+                    user.Surname = model.Surname;
+                    user.PhoneNumber = model.PhoneNumber;
+                    // Attempt to change user data
+                    var result = await _userManager.UpdateAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        ModelState.AddModelError("", "Nie udało się zmienić danych");
+                        return View(model);
+                    }
 
-                    identityUser.Name = model.Name;
-                    identityUser.Surname = model.Surname;
-                    identityUser.PhoneNumber = model.PhoneNumber;
+                    if (!string.IsNullOrEmpty(model.Password))
+                    {
+                        if (!string.IsNullOrEmpty(model.CurrentPassword))
+                        {
+                            var passChangeResult = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.Password);
+                            if (!passChangeResult.Succeeded)
+                            {
+                                ModelState.AddModelError("", "Nie udało się zmienić hasła.");
+                                passChangeResult.Errors.Select(e => e.Description).ToList().ForEach(e => ModelState.AddModelError("", e));
+                                return View(model);
+                            }
+                            return View("PasswordChangeConfirmed");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Aby zmienić hasło, musisz podać stare i nowe hasła.");
+                            return View(model);
+                        }
+                    }
 
-                    var result = await _userManager.UpdateAsync(identityUser);
                     if (result.Succeeded)
                     {
                         return RedirectToAction(nameof(Home.Index), nameof(Home));
