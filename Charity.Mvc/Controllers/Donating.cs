@@ -74,7 +74,9 @@ namespace Charity.Mvc.Controllers
             }
 
             // Prepare Donation object for save to database
-            var donationJson = JsonConvert.SerializeObject(model);
+            var donationJson = JsonConvert.SerializeObject(
+                model, 
+                new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
             var donation = JsonConvert.DeserializeObject<DonationModel>(donationJson);
             donation.PickUpOn = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
             
@@ -133,10 +135,7 @@ namespace Charity.Mvc.Controllers
                 }
             }
 
-            if (!(model.PickUpDateOn > new DateTime(
-                year: DateTime.Now.Year, 
-                month: DateTime.Now.Month, 
-                day: DateTime.Now.Day + 2)))
+            if (!(model.PickUpDateOn > DateTime.Now.AddDays(2)))
             {
                 errors.Add("Na zorganizowanie odbioru musimy mieć przynajmniej 3 dni. Wyznacz termin za 3 dni lub późniejszy");
             }
