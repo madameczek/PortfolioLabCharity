@@ -1,8 +1,9 @@
-﻿@{
-    ViewBag.Title = "Summary";
+﻿@using Charity.Mvc.Controllers
+@model Charity.Mvc.Models.ViewModels.DonateViewModel
+
+@{
+    ViewBag.Title = "Podsumowanie";
 }
-@using Charity.Mvc.Controllers
-@model Charity.Mvc.Models.ViewModels.DonationViewModel
 
 <header class="header--form-page">
     @Html.PartialAsync("_MenuBar").Result
@@ -15,16 +16,16 @@
             <div data-step="5" class="active">
                 <h3>Podsumowanie Twojej darowizny</h3>
 
-                <input asp-for=Quantity type="hidden" value=@Model.Quantity />
-                <input asp-for=Street type="hidden" value=@Model.Street />
-                <input asp-for=City type="hidden" value=@Model.City />
-                <input asp-for=ZipCode type="hidden" value=@Model.ZipCode />
-                <input asp-for=PhoneNumber type="hidden" value=@Model.PhoneNumber />
-                <input asp-for=PickUpDateOn type="hidden" value=@Model.PickUpDateOn />
-                <input asp-for=PickUpTimeOn type="hidden" value=@Model.PickUpTimeOn />
-                <input asp-for=PickUpComment type="hidden" value=@Model.PickUpComment />
-                <input asp-for=InstitutionId type="hidden" value=@Model.InstitutionId />
-                
+                <input asp-for="Quantity" type="hidden" value="@Model.Quantity" />
+                <input asp-for="Street" type="hidden" value="@Model.Street" />
+                <input asp-for="City" type="hidden" value="@Model.City" />
+                <input asp-for="ZipCode" type="hidden" value="@Model.ZipCode" />
+                <input asp-for="PhoneNumber" type="hidden" value="@Model.PhoneNumber" />
+                <input asp-for="PickUpDateOn" type="hidden" value="@Model.PickUpDateOn" />
+                <input asp-for="PickUpTimeOn" type="hidden" value="@Model.PickUpTimeOn" />
+                <input asp-for="PickUpComment" type="hidden" value="@Model.PickUpComment" />
+                <input asp-for="InstitutionId" type="hidden" value="@Model.InstitutionId" />
+
                 <div class="summary">
                     <div class="form-section">
                         <h4>Oddajesz worków: @Model.Quantity</h4>
@@ -41,9 +42,9 @@
                                                     @Model.Categories[i].Name
                                                 </li>
                                             }
-                                            <input asp-for=Categories[i].Name type="hidden" value=@Model.Categories[i].Name />
-                                            <input asp-for=Categories[i].Id type="hidden" value=@Model.Categories[i].Id />
-                                            <input asp-for=Categories[i].IsChecked type="hidden" value=@Model.Categories[i].IsChecked />
+                                            <input asp-for=Categories[i].Name type="hidden" value="@Model.Categories[i].Name" />
+                                            <input asp-for=Categories[i].Id type="hidden" value="@Model.Categories[i].Id" />
+                                            <input asp-for=Categories[i].IsChecked type="hidden" value="@Model.Categories[i].IsChecked" />
                                         }
                                     </ul>
                                 </div>

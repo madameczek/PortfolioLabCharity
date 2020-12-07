@@ -10,6 +10,7 @@ namespace Charity.Mvc.Services
 {
     public class DonationService : IDonationService
     {
+#region Ctor & DI
         private readonly CharityDbContext _context;
         private readonly ILogger _logger;
         public DonationService(ILoggerFactory loggerFactory, CharityDbContext context)
@@ -17,19 +18,13 @@ namespace Charity.Mvc.Services
             _logger = loggerFactory.CreateLogger("Donation Service");
             _context = context;
         }
+#endregion
 
         public List<InstitutionModel> GetInstitutionList(int skip = 0, int take = 4)
         {
             try
             {
-                if (take != 0)
-                {
-                    return _context.Institutions.Skip(skip).Take(take).ToList();
-                }
-                else
-                {
-                    return _context.Institutions.ToList();
-                }
+                return take != 0 ? _context.Institutions.Skip(skip).Take(take).ToList() : _context.Institutions.ToList();
             }
             catch (Exception e)
             {
@@ -42,7 +37,7 @@ namespace Charity.Mvc.Services
         {
             try
             {
-                return _context.Institutions.Where(i => i.Id == id).FirstOrDefault();
+                return _context.Institutions.FirstOrDefault(i => i.Id == id);
             }
             catch (Exception e)
             {

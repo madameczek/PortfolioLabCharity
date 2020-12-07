@@ -6,6 +6,7 @@ namespace Charity.Mvc.Services
     public interface ICharityEmailService
     {
         public Task SendDonationConfirmation(DonationModel donation);
-        public Task SendEmailConfirmation(string confirmationLink, CharityUser user);
+        public Task SendRegistrationConfirmation(string confirmationLink, CharityUser user);
+        public Task SendResetPasswordConfirmation(string confirmationLink, CharityUser user);
     }
 }

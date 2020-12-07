@@ -6,10 +6,7 @@
 
 <header class="header--form-page">
     @Html.PartialAsync("_MenuBar").Result
-
-    <div class="slogan container container--90">
-
-    </div>
+    @Html.PartialAsync("_SloganList.cshtml").Result
 </header>
 
 <table style="font-size: 1.5rem;" class="col table-bordered table-info">

@@ -2,7 +2,7 @@
     ViewBag.Title = "Donate";
 }
 @using Charity.Mvc.Controllers
-@model Charity.Mvc.Models.ViewModels.DonationViewModel
+@model Charity.Mvc.Models.ViewModels.DonateViewModel
 
 <header class="header--form-page">
     @Html.PartialAsync("_MenuBar").Result
@@ -40,17 +40,12 @@
 
                 <div class="text-danger">
                     @{
-                        var modelStatesWithErrors = ViewData.ModelState.Where(n => n.Value.Errors.Count() > 0).ToList();
-                        if (modelStatesWithErrors != null)
+                        var modelStatesWithErrors = ViewData.ModelState.Where(n => n.Value.Errors.Any()).ToList();
+                        foreach (var item in modelStatesWithErrors.
+                            Select(modelStateErrorList => modelStateErrorList.Value.Errors.ToList()).
+                            SelectMany(error => error))
                         {
-                            foreach (var modelStateErrorList in modelStatesWithErrors)
-                            {
-                                var error = modelStateErrorList.Value.Errors.ToList();
-                                foreach (var item in error)
-                                {
-                                    <h5>@item.ErrorMessage</h5>
-                                }
-                            }
+                            <h5>@item.ErrorMessage</h5>
                         }
                     }
                 </div>

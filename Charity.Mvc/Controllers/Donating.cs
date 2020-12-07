@@ -18,7 +18,7 @@ namespace Charity.Mvc.Controllers
     [RequireHttps]
     public class Donating : Controller
     {
-        private List<string> errors;
+        private List<string> _errors;
 
         [HttpGet]
         public IActionResult Donate()
@@ -26,13 +26,14 @@ namespace Charity.Mvc.Controllers
             try
             {
                 // Prepare ViewModel with categories and institutions to be used when user makes a selection
+                var cats = _donationService.GetCategoryList();
                 var categories = JsonConvert.SerializeObject(
-                    _donationService.GetCategoryList(), 
+                    cats, 
                     new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 var institutions = JsonConvert.SerializeObject(
                     _donationService.GetInstitutionList(take: 0),
                     new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-                var model = new DonationViewModel()
+                var model = new DonateViewModel()
                 {
                     Institutions = JsonConvert.DeserializeObject<List<InstitutionViewModel>>(institutions),
                     Categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(categories),
@@ -48,25 +49,25 @@ namespace Charity.Mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult Donate(DonationViewModel model)
+        public IActionResult Donate(DonateViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            if(!IsModelValid(model, out errors))
+            if (IsModelValid(model, out _errors))
             {
-                errors.ForEach(e => ModelState.AddModelError("", e));
-                return View(model);
+                return View("Summary", model);
             }
+            _errors.ForEach(e => ModelState.AddModelError("", e));
 
-            return View("Summary", model);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Confirmation(DonationViewModel model)
+        public async Task<IActionResult> Confirmation(DonateViewModel model)
         {
             if (model.Command == "Edit")
             {
@@ -78,9 +79,9 @@ namespace Charity.Mvc.Controllers
             var donation = JsonConvert.DeserializeObject<DonationModel>(donationJson);
             donation.PickUpOn = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
             
-            // Create list of categories beeing in relation to the donation
+            // Create list of categories beeing in relation with the donation
             var categoryIds = new List<int>();
-            model.Categories.Where(x => x.IsChecked == true).ToList().ForEach(c => categoryIds.Add(c.Id));
+            model.Categories.Where(x => x.IsChecked).ToList().ForEach(c => categoryIds.Add(c.Id));
             
             // Find authenticated user Id. Add relation Donation-User
             //string userId;
@@ -95,15 +96,15 @@ namespace Charity.Mvc.Controllers
             
             // Send confirmation email to authenticated user
             await createDonationTask;
-            if (createDonationTask.IsCompletedSuccessfully)
+            if (!createDonationTask.IsCompletedSuccessfully)
             {
-                if (User.Identity.IsAuthenticated)
-                {
-                    _ = _emailService.SendDonationConfirmation(donation);
-                }
-                return View();
+                return RedirectToAction(nameof(Home.Index), nameof(Home));
             }
-            return RedirectToAction(nameof(Home.Index), nameof(Home));
+            if (User.Identity.IsAuthenticated)
+            {
+                _ = _emailService.SendDonationConfirmation(donation);
+            }
+            return View();
         }
 
         [Authorize]
@@ -117,10 +118,10 @@ namespace Charity.Mvc.Controllers
         [NonAction]
         // This method validates model against requirements additional to these set by attributes.
         // If validation fails, add message to ModelState dictionary
-        private bool IsModelValid(DonationViewModel model, out List<string> errors)
+        private bool IsModelValid(DonateViewModel model, out List<string> errors)
         {
             errors = new List<string>();
-            if (model.Categories.Where(c => c.IsChecked).Count() == 0)
+            if (!model.Categories.Any(c => c.IsChecked))
             {
                 errors.Add("Musisz zaznaczyć przynajmniej jedną kategorię");
             }

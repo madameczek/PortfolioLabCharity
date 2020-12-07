@@ -7,6 +7,7 @@ namespace Charity.Mvc.Models.DbModels
 {
     public class DonationModel
     {
+        [Key]
         public int Id { get; set; }
         /// <summary>
         /// Number of bags donated

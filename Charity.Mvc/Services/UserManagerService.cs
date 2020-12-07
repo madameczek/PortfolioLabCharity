@@ -10,15 +10,14 @@ namespace Charity.Mvc.Services
     public class UserManagerService : IUserManagerService
     {
         public bool IsEmailUnique(string email) =>
-            _context.Users.Where(u => u.NormalizedEmail == email.ToUpper()).FirstOrDefault() == null;
+            _context.Users.FirstOrDefault(u => u.NormalizedEmail == email.ToUpper()) == null;
 
         public string GetFirstNameById(string userId) => 
-            _context.Users.FirstOrDefault(u => u.Id == userId).Name;
+            _context.Users.FirstOrDefault(u => u.Id == userId)?.Name;
 
         public CharityUser GetUserByEmail(string email) =>
-            _context.Users.Where(u => u.NormalizedEmail == email.ToUpper()).FirstOrDefault();
+            _context.Users.FirstOrDefault(u => u.NormalizedEmail == email.ToUpper());
         
-
         private readonly CharityDbContext _context;
         public UserManagerService(CharityDbContext context)
         {

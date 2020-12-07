@@ -13,5 +13,5 @@ namespace Charity.Mvc.CustomTokenProviders
             : base(dataProtectionProvider, options, logger)
         { }
     }
-    public class EmailConfirmationTokenProviderOptions : DataProtectionTokenProviderOptions { }
+    public abstract class EmailConfirmationTokenProviderOptions : DataProtectionTokenProviderOptions { }
 }

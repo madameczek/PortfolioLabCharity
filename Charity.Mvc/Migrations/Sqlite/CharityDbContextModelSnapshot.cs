@@ -251,7 +251,7 @@ namespace Charity.Mvc.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed")
+                    b.Property<bool>("RegistrationConfirmed")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("LockoutEnabled")

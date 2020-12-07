@@ -10,14 +10,11 @@
 
 <section class="login-page">
     <h2>Zaloguj się</h2>
-    <form asp-action="Login" method="post">
+    <form asp-action="@nameof(Account.Login)" method="post">
         <div class="text-danger">
             @{
-                var errors = ViewData.ModelState.Where(n => n.Value.Errors.Count() > 0).ToList();
-                if (errors != null)
-                {
-                    errors.ForEach(e => e.Value.Errors.ToList().ForEach(i => i.ErrorMessage.ToString()));
-                }
+                var errors = ViewData.ModelState.Where(n => n.Value.Errors.Any()).ToList();
+                errors.ForEach(e => e.Value.Errors.ToList().ForEach(i => i.ErrorMessage.ToString()));
             }
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -28,12 +25,13 @@
         <div class="form-group">
             <input asp-for="Password" type="password" />
             <span asp-validation-for="Password" class="text-danger"></span>
-            <a asp-action="ResetPassword" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
+            <input class="btn btn--small btn--without-border reset-password" type="submit" formaction="@nameof(Account.ConfirmResetPassword)" formnovalidate value="Przypomnij hasło" />
+            @*<a asp-action="@nameof(Account.ConfirmResetPassword)" email="Email" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>*@
         </div>
 
         <div class="form-group form-group--buttons">
-            <a asp-action=@nameof(Account.Registration) class="btn btn--without-border">Załóż konto</a>
-            <button class="btn" type="submit">Zaloguj się</button>
+            <a asp-action="@nameof(Account.Registration)" class="btn btn--without-border">Załóż konto</a>
+            <input class="btn" type="submit" value="Zaloguj się" />
         </div>
     </form>
 </section>

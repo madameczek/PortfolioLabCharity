@@ -4,7 +4,7 @@
 
     <ul>
         @Html.PartialAsync("_CommonMenuItems").Result
-        <li><a asp-controller=@nameof(Donating) asp-action=@nameof(Donating.Donate) class="btn btn--without-border">Przekaż dary</a></li>
+        <li><a asp-controller="@nameof(Donating)" asp-action="@nameof(Donating.Donate)" class="btn btn--without-border">Przekaż dary</a></li>
         <li><a href="#contact" class="btn btn--without-border">Kontakt</a></li>
     </ul>
 </nav>

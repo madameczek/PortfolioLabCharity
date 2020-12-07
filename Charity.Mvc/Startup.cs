@@ -23,12 +23,10 @@ namespace Charity.Mvc
 {
 	public class Startup
 	{
-		public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-
-
 		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
@@ -100,7 +98,7 @@ namespace Charity.Mvc
 			services.Configure<MvcOptions>(options => options.Filters.Add(new RequireHttpsAttribute()));
 
             // This disables client side validation if needed. 
-            // In Chrome, browser validates some fields (like email) anyway.
+            // Chrome browser validates some fields (like email) anyway. Other browsers probably do it as well.
             /*services.AddRazorPages()
 				.AddViewOptions(options => options.HtmlHelperOptions.ClientValidationEnabled = false);*/
         }
