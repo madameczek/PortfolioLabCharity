@@ -17,13 +17,14 @@ Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacj
 - Potwierdzenie rejestacji (aktywacja konta) przez email z tokenem
 - Edycja danych użytkownika
 - Zmiana hasła
+- Obsługa ustawienia zapomnianego hasła
 - Lista darów użytkownika (dla zarejestrowanego użytkownika)
 - [Działające demo w chmurze Azure](https://drugie-zycie.azurewebsites.net)
 
 ## Do dokończenia
 
-- Reset hasła
 - Obsługa formularza kontaktowego
+- Administracja: ustawianie zleceniom flagi 'odebrane', blokada użytkownika itp.
 
 ## Użyte języki
 
