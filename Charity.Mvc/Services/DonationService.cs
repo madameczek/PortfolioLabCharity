@@ -117,9 +117,10 @@ namespace Charity.Mvc.Services
                 var categoryDonations = new List<CategoryDonationModel>();
                 categoryIds.ForEach(c => categoryDonations.Add(new CategoryDonationModel() { CategoryId = c, DonationId = donation.Id }));
                 _context.AddRange(categoryDonations);
-                _context.SaveChanges();
+                result += _context.SaveChanges();
 
-                _logger.LogInformation("Created donation in the database.");
+                if (result > 1) _logger.LogInformation("Donation reated in the database.");
+
                 return Task.CompletedTask;
             }
             catch (Exception e)

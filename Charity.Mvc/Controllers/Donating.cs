@@ -26,9 +26,8 @@ namespace Charity.Mvc.Controllers
             try
             {
                 // Prepare ViewModel with categories and institutions to be used when user makes a selection
-                var cats = _donationService.GetCategoryList();
                 var categories = JsonConvert.SerializeObject(
-                    cats, 
+                    _donationService.GetCategoryList(), 
                     new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 var institutions = JsonConvert.SerializeObject(
                     _donationService.GetInstitutionList(take: 0),

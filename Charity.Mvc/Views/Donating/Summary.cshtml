@@ -55,7 +55,6 @@
                                 <span class="summary--text">
                                     Dla:
                                     @{
-                                        //var institutions = Model.Institutions.Where(i => i.Id == Model.InstitutionId).ToList();
                                         for (var i = 0; i < Model.Institutions.Count; i++)
                                         {
                                             if (Model.Institutions[i].Id == @Model.InstitutionId) @Model.Institutions[i].Name;

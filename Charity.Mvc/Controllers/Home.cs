@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Charity.Mvc.Models;
-using Charity.Mvc.Models.ViewModels;
+﻿using Charity.Mvc.Models.ViewModels;
 using Charity.Mvc.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics;
 
 namespace Charity.Mvc.Controllers
 {
-	public class Home : Controller
+    public class Home : Controller
 	{
 		private readonly IDonationService _donationService;
 		private readonly ILogger _logger;
         public Home(IDonationService donationService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;
-            _logger = loggerFactory.CreateLogger("HomeController");
+            _logger = loggerFactory.CreateLogger("Home Controller");
         }
 
 		[HttpGet]
         public IActionResult Index()
 		{
-			OrganisationsBagsViewModel model;
+			OrganisationsBagsViewModel model = null;
 			try
 			{
 				model = new OrganisationsBagsViewModel()
@@ -34,9 +30,9 @@ namespace Charity.Mvc.Controllers
 					BagCount = _donationService.GetTotalNumberOfBags()
 				};
 			}
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                _logger.LogError(ex, "Error preparing Index view.");
             }
 			return View(model);
 		}

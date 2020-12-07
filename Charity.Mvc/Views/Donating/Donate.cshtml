@@ -32,11 +32,10 @@
     <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/4</div>
 
-        <form asp-action=@nameof(Donating.Donate) method="post">
+        <form asp-action="@nameof(Donating.Donate)" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <!-- STEP 1: class .active is switching steps -->
             <div data-step="1" class="active">
-                <h3>Zaznacz co chcesz oddać:</h3>
 
                 <div class="text-danger">
                     @{
@@ -49,6 +48,8 @@
                         }
                     }
                 </div>
+
+                <h3>Zaznacz co chcesz oddać:</h3>
 
                 @{for (var i = 0; i < Model.Categories.Count; i++)
                     {

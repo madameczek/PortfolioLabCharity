@@ -38,9 +38,9 @@ namespace Charity.Mvc.Services
                 user.Email,
                 //"marek@adameczek.pl",
                 $"{user.Name}, zlecono zmianę hasła",
-                $"<h3>Otrzymujesz ten email, bo ktoś wybrał opcję resetowania hasła do serwisu 'Charity'</h3><br />" +
+                $"<h3>Otrzymujesz ten email, bo uruchomiono opcję resetowania hasła do serwisu 'Charity'</h3><br />" +
                 $"Kliknij <a href=\"{confirmationLink}\">link</a>, by potwierdzić operację<br />" +
-                $"Zostaniesz przekierowany do formularza zmiany hasła.<br />" +
+                $"Nastąpi przekierowanie do formularza zmiany hasła.<br />" +
                 $"Zignoruj tę wiadomość, jeśli nie zlecełeś(aś) operacji.",
                 true);
             return Task.CompletedTask;
@@ -51,7 +51,7 @@ namespace Charity.Mvc.Services
         public CharityEmailService(IEmailService emailService, ILoggerFactory loggerFactory)
         {
             _emailService = emailService;
-            _logger = loggerFactory.CreateLogger("EmailService");
+            _logger = loggerFactory.CreateLogger("Email Service");
         }
     }
 }

@@ -56,14 +56,12 @@ namespace Charity.Mvc
 			services.AddDbContext<CharityDbContext>(options =>
 			{
 				var host = Configuration.GetValue<string>("HOST", defaultValue: "Local");
-/*				if (host == "Local")
+                if (host == "Local")
                 {
-					//options.UseLazyLoadingProxies();
-					options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
-				}
-                else*/
+                    options.UseSqlServer(Configuration.GetConnectionString("MsSqlConnection"));
+                }
+                else
                 {
-					//options.UseLazyLoadingProxies();
 					// Remember to set HOST environment variable in Azure to execute this
 					options.UseSqlite(Configuration.GetConnectionString("SqLiteConnection"));
 				}
