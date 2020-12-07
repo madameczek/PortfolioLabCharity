@@ -15,6 +15,6 @@ namespace Charity.Mvc.Models.DbModels
         public string Description { get; set; }
 
         // Relationships
-        public virtual ICollection<DonationModel> Donations { get; set; }
+        public ICollection<DonationModel> Donations { get; set; }
     }
 }

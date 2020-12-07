@@ -4,7 +4,7 @@
     @Html.PartialAsync("_UserActions").Result
 
     <ul>
-        @Html.PartialAsync("_CommonMenuItems").Result
-        <li><a asp-controller=@nameof(Home) asp-action=@nameof(Home.Index) asp-fragment="contact" class="btn btn--without-border">Kontakt</a></li>
+        @await Html.PartialAsync("_CommonMenuItems")
+        <li><a asp-controller="@nameof(Home)" asp-action="@nameof(Home.Index)" asp-fragment="contact" class="btn btn--without-border">Kontakt</a></li>
     </ul>
 </nav>

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Charity.Mvc.Services
 {
@@ -89,9 +90,13 @@ namespace Charity.Mvc.Services
         {
             try
             {
-                // Using lazy loading
-                var donations = _context.Donations.Where(d => d.User.Id == userId).OrderByDescending(d=>d.PickUpOn).ToList();
-                return donations;
+                var donations = _context.Donations
+                    .Where(d => d.User.Id == userId)
+                    .OrderByDescending(d => d.PickUpOn)
+                    .Include(d => d.CategoryDonation)
+                        .ThenInclude(c => c.Category)
+                    .Include(d => d.Institution);
+                return donations.ToList();
             }
             catch (Exception e)
             {

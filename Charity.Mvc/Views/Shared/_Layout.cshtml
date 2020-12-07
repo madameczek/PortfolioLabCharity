@@ -19,6 +19,6 @@
     <footer>
         @Html.PartialAsync("_Footer").Result;
     </footer>
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
