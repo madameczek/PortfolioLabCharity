@@ -119,7 +119,7 @@ namespace Charity.Mvc.Services
                 _context.AddRange(categoryDonations);
                 result += _context.SaveChanges();
 
-                if (result > 1) _logger.LogInformation("Donation reated in the database.");
+                if (result > 1) _logger.LogInformation("Donation created in the database.");
 
                 return Task.CompletedTask;
             }

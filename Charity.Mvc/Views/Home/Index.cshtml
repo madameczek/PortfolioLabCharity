@@ -55,7 +55,7 @@
 
     @if (!User.Identity.IsAuthenticated)
     {
-    <a asp-controller=@nameof(Account) asp-action=@nameof(Account.Registration) class="btn btn--large">Załóż konto</a>
+        <a asp-controller=@nameof(Account) asp-action=@nameof(Account.Registration) class="btn btn--large">Załóż konto</a>
     }
 </section>
 
@@ -64,9 +64,11 @@
         <h2>O nas</h2>
         <p>To jest aplikacja testowa. Kod i opis znajdziesz na <a href="https://github.com/madameczek/PortfolioLabCharity">Github.</a></p>
         <p>Przesłanie zlecenia nie spowoduje odbioru darów. Ale kto wie, może kiedyś będzie to możliwe :)</p>
-        <p>O cookies: Aplikacja zapisuje tylko niezbędne ciastka sesyjne.
-        Dane osobowe są gromadzone w bazie aplikacji i przetwarzane tylko w celu demonstracji jej działania. 
-        Możesz żądać ich usunięcia wysyłając wiadomość przez formularz kontaktowy.</p>
+        <p>
+            O cookies: Aplikacja zapisuje tylko niezbędne ciastka sesyjne.
+            Dane osobowe są gromadzone w bazie aplikacji i przetwarzane tylko w celu demonstracji jej działania.
+            Możesz żądać ich usunięcia wysyłając wiadomość przez formularz kontaktowy.
+        </p>
         <img src="~/images/signature.svg" class="about-us--text-signature" alt="Signature" />
     </div>
     <div class="about-us--image"><img src="~/images/about-us.jpg" alt="People in circle" /></div>
@@ -85,14 +87,13 @@
             </p>
 
             <ul class="help--slides-items">
-                @for (int i = 0; i < Model.Institutions.Count; i += 2)
+                @for (var i = 0; i < Model.Institutions.Count; i += 2)
                 {
                     <li>
                         <div class="col">
                             <div class="title">@Model.Institutions[i].Name</div>
                             <div class="subtitle">@Model.Institutions[i].Description</div>
                         </div>
-
                         @if (i + 1 < Model.Institutions.Count)
                         {
                             <div class="col">
@@ -113,3 +114,6 @@
         </div>
     }
 </section>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -8,11 +8,11 @@ namespace Charity.Mvc.Models.ViewModels
         private string _surname;
         private string _phoneNumber;
 
-        [Required]
+        [Required(ErrorMessage = "Pole nie może być puste.")]
         [Display(Prompt = "podaj imię")]
         public string Name { get => _name; set => _name = value?.Trim(); }
 
-        [Required]
+        [Required(ErrorMessage = "Pole nie może być puste.")]
         [Display(Prompt = "podaj nazwisko")]
         public string Surname { get => _surname; set => _surname = value?.Trim(); }
 

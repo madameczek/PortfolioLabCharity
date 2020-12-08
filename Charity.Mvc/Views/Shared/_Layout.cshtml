@@ -2,7 +2,6 @@
 
 <html lang="pl">
 <head>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - Oddam w dobre ręce</title>
@@ -17,8 +16,8 @@
 <body>
     @RenderBody()
     <footer>
-        @Html.PartialAsync("_Footer").Result;
+        @Html.PartialAsync("_Footer", new ContactFormViewModel()).Result;
     </footer>
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: true)
 </body>
 </html>

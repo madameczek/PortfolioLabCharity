@@ -6,12 +6,12 @@ namespace Charity.Mvc.Models.ViewModels
     {
         private string _email;
 
-        [Required]
+        [Required(ErrorMessage = "Pole nie może być puste.")]
         [Display(Prompt = "Email")]
         [DataType(DataType.EmailAddress, ErrorMessage ="Nie wygląda to jak adres email")]
         public string Email { get => _email; set => _email = value?.Trim(); }
 
-        [Required]
+        [Required(ErrorMessage = "Pole nie może być puste.")]
         [Display(Prompt = "Hasło")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

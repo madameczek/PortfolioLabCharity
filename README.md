@@ -17,13 +17,15 @@ Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacj
 - Potwierdzenie rejestacji (aktywacja konta) przez email z tokenem
 - Edycja danych użytkownika
 - Zmiana hasła
-- Obsługa ustawienia zapomnianego hasła
+- Obsługa ponownego ustawienia hasła (reset hasła) przez email z tokenem
+- Obsługa formularza kontaktowego
 - Lista darów użytkownika (dla zarejestrowanego użytkownika)
 - [Działające demo w chmurze Azure](https://drugie-zycie.azurewebsites.net)
 
+Starałem się być DRY, więc widoki są poprzykrajane tak, żeby maksymalnie korzystać z widoków częściowych. Powtarzające się częsci kodu są wydzielone do osobnych modułów. Warstwy aplikacji są oddzielone od siebie zgodnie z podziałem odpowiedzialności MVC.
+
 ## Do dokończenia
 
-- Obsługa formularza kontaktowego
 - Administracja: ustawianie zleceniom flagi 'odebrane', blokada użytkownika itp.
 
 ## Użyte języki
@@ -35,12 +37,14 @@ Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacj
 ## Frameworki i biblioteki
 
 - .NET Core MVC
-- .NET Core with Identity
-- Entity Framework
-- Azure Cloud
+- .NET Core Identity
+- Entity Framework (code first)
+- Linq
+- Azure Cloud (aplikacja i baza w chmurze)
 - MailKit
 - Serilog: logowanie do pliku, serwera syslog, bazy danych
 - konfiguracja aplikacji w plikach .json
+- Bootstrap
 
 ## Bazy danych
 

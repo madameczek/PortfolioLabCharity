@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
+using System;
 
 namespace Charity.Mvc
 {
-	public class Program
+    public static class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -31,7 +24,7 @@ namespace Charity.Mvc
             }
 		}
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(config =>
                 {

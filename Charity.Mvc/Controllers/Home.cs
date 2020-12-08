@@ -11,9 +11,11 @@ namespace Charity.Mvc.Controllers
 	{
 		private readonly IDonationService _donationService;
 		private readonly ILogger _logger;
-        public Home(IDonationService donationService, ILoggerFactory loggerFactory)
+        private readonly ICharityEmailService _emailService;
+        public Home(IDonationService donationService, ICharityEmailService emailService, ILoggerFactory loggerFactory)
         {
             _donationService = donationService;
+            _emailService = emailService;
             _logger = loggerFactory.CreateLogger("Home Controller");
         }
 
@@ -37,7 +39,21 @@ namespace Charity.Mvc.Controllers
 			return View(model);
 		}
 
-		public IActionResult Error()
+        [HttpPost]
+		[ValidateAntiForgeryToken]
+        public IActionResult ContactFormMessage(ContactFormViewModel model)
+        {
+            if (string.IsNullOrEmpty(model.FirstName) || 
+                string.IsNullOrEmpty(model.LastName) ||
+                string.IsNullOrEmpty(model.Message))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            _ = _emailService.SendContactFormMessage(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}

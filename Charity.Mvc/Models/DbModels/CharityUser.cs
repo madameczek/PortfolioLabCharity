@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Charity.Mvc.Models.DbModels
 {
-    public class CharityUser : IdentityUser
+    public sealed class CharityUser : IdentityUser
     {
         [StringLength(50)]
         public string Name { get; set; }
@@ -13,6 +13,6 @@ namespace Charity.Mvc.Models.DbModels
         public string Surname { get; set; }
 
         // Relationships
-        public virtual ICollection<DonationModel> Donations { get; set; }
+        public ICollection<DonationModel> Donations { get; set; }
     }
 }
