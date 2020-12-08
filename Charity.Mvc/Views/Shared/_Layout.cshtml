@@ -18,6 +18,6 @@
     <footer>
         @Html.PartialAsync("_Footer", new ContactFormViewModel()).Result;
     </footer>
-    @await RenderSectionAsync("Scripts", required: true)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
