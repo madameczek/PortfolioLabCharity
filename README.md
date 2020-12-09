@@ -8,6 +8,8 @@ W zweryfikowane miejsca trzeba pojechać, a nie ma na to czasu lub nie ma jak ta
 
 Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacji.
 
+![Home page](charity.gif)
+
 ## Stan realizacji (co działa)
 
 - Utworzenie zlecenia wysłania darów
