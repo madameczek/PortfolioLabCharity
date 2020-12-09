@@ -1,12 +1,14 @@
 ﻿@using Charity.Mvc.Controllers
-@using Charity.Mvc.Services
-@inject IUserManagerService Manager
+@using Charity.Mvc.Models.DbModels
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<CharityUser> Manager
+
 @{
     if (User.Identity.IsAuthenticated)
     {
         <ul class="nav--actions">
             <li class="logged-user">
-                Witaj @Manager.GetFirstNameById(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"))?.Value)!
+                Witaj @Manager.FindByIdAsync(User.Claims.FirstOrDefault(c => c.Type.Contains("nameidentifier"))?.Value).Result.Name!
                 <ul class="dropdown">
                     <li>@Html.ActionLink("Profil", nameof(Account.EditProfile), nameof(Account))</li>
                     <li><a href="#">Ustawienia</a></li>

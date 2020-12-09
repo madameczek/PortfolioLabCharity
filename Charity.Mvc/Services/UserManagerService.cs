@@ -11,9 +11,6 @@ namespace Charity.Mvc.Services
     {
         public bool IsEmailUnique(string email) =>
             _context.Users.FirstOrDefault(u => u.NormalizedEmail == email.ToUpper()) == null;
-
-        public string GetFirstNameById(string userId) => 
-            _context.Users.FirstOrDefault(u => u.Id == userId)?.Name;
         
         private readonly CharityDbContext _context;
         public UserManagerService(CharityDbContext context)
