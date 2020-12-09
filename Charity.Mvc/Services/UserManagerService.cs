@@ -14,9 +14,6 @@ namespace Charity.Mvc.Services
 
         public string GetFirstNameById(string userId) => 
             _context.Users.FirstOrDefault(u => u.Id == userId)?.Name;
-
-        public CharityUser GetUserByEmail(string email) =>
-            _context.Users.FirstOrDefault(u => u.NormalizedEmail == email.ToUpper());
         
         private readonly CharityDbContext _context;
         public UserManagerService(CharityDbContext context)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Charity.Mvc.Contexts;
+﻿using Charity.Mvc.Contexts;
 using Charity.Mvc.CustomTokenProviders;
 using Charity.Mvc.Models.DbModels;
 using Charity.Mvc.Services;
@@ -18,10 +14,11 @@ using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using Serilog;
 using Serilog.Events;
+using System;
 
 namespace Charity.Mvc
 {
-	public class Startup
+    public class Startup
 	{
         private IConfiguration Configuration { get; }
 		public Startup(IConfiguration configuration)

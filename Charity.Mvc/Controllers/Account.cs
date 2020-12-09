@@ -40,7 +40,7 @@ namespace Charity.Mvc.Controllers
 
             try
             {
-                var user = _userManagerService.GetUserByEmail(model.Email);
+                var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Nie odnaleziono użytkownika lub błędne hasło");
@@ -248,7 +248,7 @@ namespace Charity.Mvc.Controllers
             }
             try
             {
-                var user = _userManagerService.GetUserByEmail(model.Email);
+                var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     //ModelState.AddModelError("", "Nie odnaleziono adresu email");
