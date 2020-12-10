@@ -1,7 +1,5 @@
 ﻿using Charity.Mvc.Contexts;
 using Charity.Mvc.Models.DbModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +14,12 @@ namespace Charity.Mvc.Services
         public UserManagerService(CharityDbContext context)
         {
             _context = context;
+        }
+
+        public async Task ConfirmEmailAsync(CharityUser user)
+        {
+            _context.Users.FirstOrDefault(u => u.Email == user.Email).EmailConfirmed = true;
+            await _context.SaveChangesAsync();
         }
     }
 }

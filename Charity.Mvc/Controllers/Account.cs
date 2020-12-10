@@ -93,14 +93,17 @@ namespace Charity.Mvc.Controllers
                     return View(model);
                 }
 
+                var random = new Random();
                 var user = new CharityUser()
                 {
                     Name = model.Name,
                     Surname = model.Surname,
                     Email = model.Email,
                 };
-                user.UserName = $"{user.Name}{user.Surname}".Replace(" ", "_");
+                user.UserName = $"{user.Name}{user.Surname}";
                 user.UserName = RemoveDiacritics(user.UserName);
+                user.UserName = RemoveNotLetterNorDigit(user.UserName);
+                user.UserName += random.Next(1000).ToString("D3");
                 user.NormalizedUserName = user.UserName.ToUpper();
                 user.NormalizedEmail = user.Email.ToUpper();
 
@@ -249,10 +252,10 @@ namespace Charity.Mvc.Controllers
             try
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
-                    //ModelState.AddModelError("", "Nie odnaleziono adresu email");
-                    return View(model);
+                    ModelState.AddModelError("", "Nie odnaleziono adresu email"); // To show or not to show that email address id valid
+                    return View(nameof(Login), model);
                 }
                 // Prepare token & send it via email
                 _ = GenerateAndSendPasswordResetToken(user);
@@ -289,7 +292,15 @@ namespace Charity.Mvc.Controllers
             }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
-            if (result.Succeeded) return View("PasswordChangeConfirmed");
+            if (result.Succeeded)
+            {
+                // Confirm email, if not confirmed yet
+                if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    _ = _userManagerService.ConfirmEmailAsync(user);
+                }
+                return View("PasswordChangeConfirmed");
+            }
 
             ModelState.AddModelError("", "Nie udało się zmienić hasła.");
             result.Errors
@@ -352,8 +363,18 @@ namespace Charity.Mvc.Controllers
                     stringBuilder.Append(c);
                 }
             }
-
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        [NonAction]
+        private static string RemoveNotLetterNorDigit(string text)
+        {
+            var sb = new StringBuilder();
+            foreach (var character in text.Where(char.IsLetterOrDigit))
+            {
+                sb.Append(character);
+            }
+            return sb.ToString();
         }
 
         [NonAction]

@@ -13,7 +13,7 @@
                     <li>@Html.ActionLink("Profil", nameof(Account.EditProfile), nameof(Account))</li>
                     <li><a href="#">Ustawienia</a></li>
                     <li>@Html.ActionLink("Moje zbiórki", nameof(Donating.GetDonations), nameof(Donating))</li>
-                    <li><a asp-controller=@nameof(Account) asp-action=@nameof(Account.Logout)>Wyloguj</a></li>
+                    <li>@Html.ActionLink("Wyloguj", nameof(Account.Logout), nameof(Account))</li>
                 </ul>
             </li>
         </ul>

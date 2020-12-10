@@ -30,7 +30,7 @@
         <div class="form-group form-group--buttons">
             <a asp-action="@nameof(Account.Registration)" class="btn btn--without-border">Załóż konto</a>
             <input class="btn" type="submit" value="Zaloguj się" />
-            <input class="btn btn--without-border" type="submit" formacCtion="@nameof(Account.ConfirmResetPassword)" formnovalidate value="Przypomnij hasło" />
+            <input class="btn btn--without-border" type="submit" value="Przypomnij hasło" formaction="@nameof(Account.ConfirmResetPassword)" formnovalidate />
         </div>
     </form>
 </section>
