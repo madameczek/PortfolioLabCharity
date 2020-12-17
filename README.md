@@ -12,23 +12,23 @@ Powyższy opis wraz z layoutem w czystym HTMLu jest wsadem do wykonania aplikacj
 
 ## Stan realizacji (co działa)
 
-- Utworzenie zlecenia wysłania darów
+- [x] Utworzenie zlecenia wysłania darów  
   - Walidacja wprowadzanych danych przez atrybuty modelu oraz dodatkową logiką
-- Wysłanie potwierdzenia zlecenia na email zarejestrowanego użytkownika
-- Rejestracja użytkownika
-- Potwierdzenie rejestacji (aktywacja konta) przez email z tokenem
-- Edycja danych użytkownika
-- Zmiana hasła
-- Obsługa ponownego ustawienia hasła (reset hasła) przez email z tokenem
-- Obsługa formularza kontaktowego
-- Lista darów użytkownika (dla zarejestrowanego użytkownika)
-- [Działające demo w chmurze Azure](https://drugie-zycie.azurewebsites.net)
+- [x] Wysłanie potwierdzenia zlecenia na email zarejestrowanego użytkownika
+- [x] Rejestracja użytkownika
+- [x] Potwierdzenie rejestacji (aktywacja konta) przez email z tokenem
+- [x] Edycja danych użytkownika
+- [x] Zmiana hasła
+- [x] Obsługa ponownego ustawienia hasła (reset hasła) przez email z tokenem
+- [x] Obsługa formularza kontaktowego
+- [x] Lista darów użytkownika (dla zarejestrowanego użytkownika)
+- [x] [Działające demo w chmurze Azure](https://drugie-zycie.azurewebsites.net)
 
 Starałem się być DRY, więc widoki są poprzykrajane tak, żeby maksymalnie korzystać z widoków częściowych. Powtarzające się częsci kodu są wydzielone do osobnych modułów. Warstwy aplikacji są oddzielone od siebie zgodnie z podziałem odpowiedzialności MVC.
 
 ## Do dokończenia
 
-- Administracja: ustawianie zleceniom flagi 'odebrane', blokada użytkownika itp.
+- [ ] Administracja: ustawianie zleceniom flagi 'odebrane', blokada użytkownika itp.
 
 ## Użyte języki
 

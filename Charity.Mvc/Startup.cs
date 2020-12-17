@@ -35,9 +35,9 @@ namespace Charity.Mvc
 				.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
 				.Enrich.FromLogContext()
 #if DEBUG
-				.WriteTo.MSSqlServer(
+				/*.WriteTo.MSSqlServer(
 					Configuration.GetSection("Serilog").GetValue<string>("MsSlqlConnectionString"),
-					sinkOptions: new Serilog.Sinks.MSSqlServer.MSSqlServerSinkOptions { AutoCreateSqlTable = true, TableName = "Logs" })
+					sinkOptions: new Serilog.Sinks.MSSqlServer.MSSqlServerSinkOptions { AutoCreateSqlTable = true, TableName = "Logs" })*/
 				.WriteTo.UdpSyslog(Configuration.GetSection("Serilog").GetValue<string>("SyslogServer"))
 #endif
 				.WriteTo.Console(
